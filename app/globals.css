@@ -132,3 +132,8 @@ body {
   background-blend-mode: multiply;
   background-size: cover;
 }
+
+/*  */
+.download {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1006%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='rgba(248%2c 214%2c 182%2c 1)'%3e%3c/rect%3e%3cpath d='M723.13 577.46C885.08 532.29 935.06 85.21 1175.88 80.15 1416.71 75.09 1507.94 245.47 1628.64 248.15' stroke='rgba(53%2c 2%2c 3%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M734.37 588.18C831.88 552.36 792.72 261.24 989.24 259.98 1185.77 258.72 1366.46 404.16 1498.99 405.58' stroke='rgba(53%2c 2%2c 3%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M650.89 622.74C806.86 601.96 868.77 258.06 1151.97 241.91 1435.17 225.76 1522.21 92.34 1653.05 90.71' stroke='rgba(53%2c 2%2c 3%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M396.09 668.85C573.27 636.55 656.72 195.13 936.63 192.59 1216.54 190.05 1334.38 374.86 1477.17 377.39' stroke='rgba(53%2c 2%2c 3%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M705.13 642.85C846.29 632.95 914.11 379.04 1195.43 360.03 1476.76 341.02 1545.57 94.75 1685.74 85.63' stroke='rgba(53%2c 2%2c 3%2c 1)' stroke-width='2'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1006'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+}
