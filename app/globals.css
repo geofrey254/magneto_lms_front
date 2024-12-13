@@ -1,21 +1,134 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+body {
+  background: var(--main);
+  color: #350203;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  :root {
+    --main: #fbf5f3;
+    --texty: #350203;
+    --card: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.magneto_txt {
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+}
+
+.mobile_nav {
+  background: rgba(53, 2, 3, 0.7);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+@keyframes rota {
+  to {
+    transform: rotate(180deg);
+  }
+
+  from {
+    transform: rotate(0deg);
+  }
+}
+
+.cert {
+  animation: rota 2s infinite linear;
+}
+
+.blurry {
+  background: rgba(248, 214, 182, 0.169);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.hero_image {
+  border-radius: 0px 200px 0px 0px;
+}
+
+.hero_image_2 {
+  border-radius: 0px 0px 0px 200px;
+}
+
+@keyframes jumpy {
+  0% {
+    top: 500px;
+    left: 0px;
+  }
+
+  50% {
+    top: 450px;
+    left: 50px;
+  }
+
+  100% {
+    top: 500px;
+    left: 0px;
+  }
+}
+
+@keyframes jumpy2 {
+  0% {
+    top: 0px;
+  }
+
+  50% {
+    top: 50px;
+  }
+
+  100% {
+    top: 0px;
+  }
+}
+
+.circle {
+  border-radius: 100%;
+  animation: jumpy 2s infinite linear;
+}
+
+.circle2 {
+  border-radius: 100%;
+  animation: jumpy2 4s infinite ease-in-out;
+}
+
+.login_head {
+  width: 100%;
+  background: url(/img/login.jpg),
+    linear-gradient(to right, #393929, #000000c0) center no-repeat;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
+  background-size: cover;
 }
