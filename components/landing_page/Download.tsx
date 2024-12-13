@@ -8,18 +8,18 @@ function Download() {
       <div className="container flex flex-col justify-center items-center">
         <div className="flex flex-col text-center gap-3">
           <h3 className="text-lg">Ready to start ?</h3>
-          <h4 className="text-3xl md:text-4xl mb-4 font-extrabold tracking-tight leading-none dark:text-white">
+          <h4 className="text-3xl md:text-2xl mb-2 font-extrabold tracking-tight leading-none dark:text-white">
             Take Learning with You – Download the Magneto App
           </h4>
         </div>
-        <div className="mt-5 flex gap-6">
+        <div className="mt-5 flex gap-3">
           <Link href="#">
             <Image
               src="/img/app.png"
               width={300}
               height={150}
               alt="google play"
-              className="w-32 md:w-62 lg:w-64"
+              className="w-32 md:w-[140px]"
             />
           </Link>
           <Link href="#">
@@ -28,7 +28,7 @@ function Download() {
               width={300}
               height={150}
               alt="App Store"
-              className="w-28 md:w-54 lg:w-56"
+              className="w-28 md:w-[125px]"
             />
           </Link>
         </div>
