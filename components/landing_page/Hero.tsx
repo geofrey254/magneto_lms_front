@@ -35,7 +35,7 @@ function Hero() {
             </Link>
             <Link
               href="#subjects"
-              className="texty text-nowrap p-3 flex gap-2 items-center border border-[#f8d6b6] hover:bg-[#f8d6b6] rounded-xl md:text-sm"
+              className="texty text-nowrap p-3 flex gap-2 items-center border-2 border-[#f8d6b6] hover:bg-[#f8d6b6] rounded-xl md:text-sm"
             >
               <SiBookstack size={15} className="text-[#350203]" />
               Explore Subjects
