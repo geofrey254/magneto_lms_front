@@ -6,7 +6,7 @@ import { PiCertificateFill } from "react-icons/pi";
 
 function Why() {
   return (
-    <section className="jumbotron bg-[#f9eeea] w-full px-4 py-8 flex justify-center">
+    <section className="jumbotron bg-[#f9eeea] w-full px-4 py-8 xl:px-20 flex justify-center">
       <div className="container bg-[#350203] w-full p-8 rounded-xl gap-12 md:gap-5">
         <div className="max-w-screen-md mb-8 lg:mb-16">
           <h3 className="text-[#f8d6b6] text-4xl md:text-4xl font-extrabold mb-4">

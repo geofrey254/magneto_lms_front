@@ -9,7 +9,7 @@ import { FaCertificate } from "react-icons/fa6";
 
 function Hero() {
   return (
-    <section className="hero w-full max-w-full px-4 pt-20 pb-6 md:p-4 md:pt-20 2xl:p-8 flex justify-center items-center">
+    <section className="hero w-full max-w-full px-4 pt-20 pb-6 md:p-4 md:pt-20 xl:px-24 2xl:p-24 flex justify-center items-center">
       <div className="container grid grid-cols-4 md:flex md:justify-between items-center">
         <div className="col-span-3 flex flex-col gap-6">
           <h2 className="text-6xl md:text-7xl font-bold text-[#350203]">

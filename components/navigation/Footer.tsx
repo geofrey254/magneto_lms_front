@@ -17,7 +17,7 @@ function Footer() {
           </h4>
           <div className="border-2 border-[#350203] w-1/6 md:w-1/4"></div>
         </div>
-        <div className="container text-[#350203] grid grid-cols-1 md:grid-cols-4 mx-auto gap-8  text-sm">
+        <div className="container text-[#350203] grid grid-cols-1 md:grid-cols-4 mx-auto gap-8  text-sm xl:justify-center">
           {/* About Section */}
           <div>
             <h3 className="font-bold mb-3 md:text-lg">About</h3>

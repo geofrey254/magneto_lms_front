@@ -4,7 +4,7 @@ import Link from "next/link";
 
 function Download() {
   return (
-    <section className="download w-full px-4 py-4 md:py-14 md:px-0 flex justify-center items-center text-[#350203]">
+    <section className="download w-full px-4 py-4 md:py-14 md:px-0 xl:px-20 flex justify-center items-center text-[#350203]">
       <div className="container grid grid-cols-1 md:grid-cols-2 justify-center items-center gap-6 md:gap-36">
         <div className="flex flex-col text-start gap-3">
           <h3 className="text-lg">Ready to start ?</h3>
