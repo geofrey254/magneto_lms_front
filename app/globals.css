@@ -84,17 +84,17 @@ body {
 
 @keyframes jumpy {
   0% {
-    top: 500px;
+    top: 400px;
     left: 0px;
   }
 
   50% {
-    top: 450px;
+    top: 350px;
     left: 50px;
   }
 
   100% {
-    top: 500px;
+    top: 400px;
     left: 0px;
   }
 }

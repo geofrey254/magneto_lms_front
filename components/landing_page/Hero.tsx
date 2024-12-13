@@ -9,10 +9,10 @@ import { FaCertificate } from "react-icons/fa6";
 
 function Hero() {
   return (
-    <section className="hero w-full max-w-full px-4 py-8 md:p-12 2xl:p-8 flex justify-center items-center">
+    <section className="hero w-full max-w-full px-4 py-8 md:p-4 2xl:p-8 flex justify-center items-center">
       <div className="container grid grid-cols-4 md:flex md:justify-between items-center">
         <div className="col-span-3 flex flex-col gap-6">
-          <h2 className="text-6xl md:text-8xl font-bold text-[#350203]">
+          <h2 className="text-6xl md:text-7xl font-bold text-[#350203]">
             Level Up
             <br className="hidden md:flex" /> with{" "}
             <span className="text-transparent magneto_txt flex ">
@@ -20,49 +20,49 @@ function Hero() {
               <FaCertificate className="cert text-[#350203]" size={30} />
             </span>
           </h2>
-          <p className="text-[#350203] font-semibold md:text-xl">
+          <p className="text-[#350203] font-semibold md:text-lg">
             Access quality high school learning materials
             <br className="hidden md:flex" /> at an affordable daily fee,
             tailored to the Kenyan curriculum.
             <br className="hidden md:flex" /> Study anytime, anywhere.
           </p>
-          <div className="flex justify-between md:justify-start items-center mt-8 gap-6">
+          <div className="flex justify-between md:justify-start items-center mt-4 gap-6">
             <Link
               href="/"
-              className="texty text-nowrap bg-[#f8d6b6] p-3 rounded-xl md:text-xl"
+              className="texty text-nowrap bg-[#f8d6b6] hover:border hover:border-[#f8d6b6] hover:bg-transparent p-3 rounded-xl md:text-sm"
             >
               Start Learning Today
             </Link>
             <Link
               href="#subjects"
-              className="texty text-nowrap p-3 flex gap-2 items-center border border-[#f8d6b6] rounded-xl md:text-xl"
+              className="texty text-nowrap p-3 flex gap-2 items-center border border-[#f8d6b6] hover:bg-[#f8d6b6] rounded-xl md:text-sm"
             >
-              <SiBookstack size={20} className="text-[#350203]" />
+              <SiBookstack size={15} className="text-[#350203]" />
               Explore Subjects
             </Link>
           </div>
         </div>
-        <div className="hidden md:flex md:gap-6">
-          <div className="relative ">
+        <div className="hidden md:flex md:gap-2">
+          <div className="relative">
             <Image
               src={learn2}
               width={280}
               alt="student learning"
               style={{
-                objectFit: "cover", // cover, contain, none
+                objectFit: "cover",
               }}
-              className="hero_image_2 mt-[200px] w-[250px] 2xl:w-[350px]"
+              className="hero_image_2 mt-[200px] w-[200px] 2xl:w-[350px] border-4 border-[#350203]"
             />
-            <div className="absolute top-[500px] left-0 bg-[#f8d6b6] w-[150px] h-[150px] circle"></div>
+            <div className="absolute top-[500px] left-0 bg-[#f8d6b6] w-[100px] h-[100px] circle border-4 border-[#350203]"></div>
           </div>
           <div className="relative">
             <Image
               src={learn1}
               width={280}
               alt="student learning"
-              className="hero_image mb-[200px] w-[250px] 2xl:w-[350px]"
+              className="hero_image mb-[200px] w-[200px] 2xl:w-[350px] border-4 border-[#350203]"
             />
-            <div className="absolute top-[0px] left-[130px] 2xl:left-[150px] bg-[#f8d6b6] w-[150px] h-[150px] circle2"></div>
+            <div className="absolute top-[0px] left-[130px] 2xl:left-[150px] bg-[#f8d6b6] w-[100px] h-[100px] circle2 border-4 border-[#350203]"></div>
           </div>
         </div>
       </div>
