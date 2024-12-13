@@ -14,7 +14,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="h-[4vh] w-full flex justify-center items-center py-8 px-4 md:px-12">
+    <nav className="fixed bg-[#fbf5f3] z-10 h-[4vh] w-full flex justify-center items-center py-8 px-4 md:px-12">
       <div className="container flex justify-between items-center">
         {/* Branding Section */}
         <div>

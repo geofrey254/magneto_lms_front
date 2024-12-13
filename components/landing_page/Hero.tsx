@@ -9,7 +9,7 @@ import { FaCertificate } from "react-icons/fa6";
 
 function Hero() {
   return (
-    <section className="hero w-full max-w-full px-4 py-8 md:p-4 2xl:p-8 flex justify-center items-center">
+    <section className="hero w-full max-w-full px-4 pt-20 pb-6 md:p-4 md:pt-20 2xl:p-8 flex justify-center items-center">
       <div className="container grid grid-cols-4 md:flex md:justify-between items-center">
         <div className="col-span-3 flex flex-col gap-6">
           <h2 className="text-6xl md:text-7xl font-bold text-[#350203]">
@@ -29,13 +29,13 @@ function Hero() {
           <div className="flex justify-between md:justify-start items-center mt-4 gap-6">
             <Link
               href="/"
-              className="texty text-nowrap bg-[#f8d6b6] hover:border hover:border-[#f8d6b6] hover:bg-transparent p-3 rounded-xl md:text-sm"
+              className="texty text-nowrap bg-[#f8d6b6] hover:border hover:border-[#f8d6b6] hover:bg-transparent p-3 rounded-xl text-sm"
             >
               Start Learning Today
             </Link>
             <Link
               href="#subjects"
-              className="texty text-nowrap p-3 flex gap-2 items-center border-2 border-[#f8d6b6] hover:bg-[#f8d6b6] rounded-xl md:text-sm"
+              className="texty text-nowrap p-3 flex gap-2 items-center border-2 border-[#f8d6b6] hover:bg-[#f8d6b6] rounded-xl text-sm"
             >
               <SiBookstack size={15} className="text-[#350203]" />
               Explore Subjects

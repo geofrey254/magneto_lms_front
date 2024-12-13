@@ -4,11 +4,11 @@ import Link from "next/link";
 function Jumbotron() {
   return (
     <section className="bg-[#350203] w-full dark:bg-gray-900">
-      <div className="py-8 px-4 mx-auto max-w-screen-xl md:text-center lg:py-16">
-        <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-[#f8d6b6] md:text-5xl lg:text-6xl dark:text-white">
+      <div className="py-12 px-4 mx-auto max-w-screen-xl md:text-center lg:py-16">
+        <h1 className="mb-4 text-3xl font-extrabold tracking-tight leading-none text-[#f8d6b6] md:text-5xl dark:text-white">
           Empowering Students Across Kenya
         </h1>
-        <p className="mb-8  font-normal text-gray-300 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">
+        <p className="mb-8 font-normal text-white  text-sm md:text-base sm:px-16 md:px-52">
           At Magneto, we believe every student deserves access to affordable,
           high-quality educational resources. Our platform is designed to
           provide students with the tools they need to succeed, from exam
