@@ -5,22 +5,48 @@ import "./globals.css";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/navigation/Footer";
 
+// providers
+import { AppWrapper } from "@/components/providers/Providers";
+
+// types
+import { Subject } from "@/types/types";
+
 export const metadata: Metadata = {
   title: "Magneto - Unlock Learning, One Day at a Time",
   description:
     "Magneto is an innovative learning platform for high school students in Kenya, providing easy access to quality educational materials at an affordable daily cost. Discover video lessons, notes, and quizzes tailored to your curriculum. Pay only for the days you use and enhance your learning experience with Magneto today!",
 };
 
-export default function RootLayout({
+// fetch subjects
+async function fetchSubjects() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subjects/`, {
+      cache: "force-cache",
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch subjects");
+    }
+
+    const subjects: Subject[] = await res.json();
+    return subjects;
+  } catch (error) {
+    console.error("Error fetching subjects:", error);
+    return [];
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const subjects = await fetchSubjects();
   return (
     <html lang="en">
       <body className="font-Poppins font-medium">
         <Navbar />
-        {children}
+        <AppWrapper subjects={subjects}>{children}</AppWrapper>
         <Footer />
       </body>
     </html>

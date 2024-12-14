@@ -47,6 +47,7 @@ function Hero() {
             <Image
               src={learn2}
               width={280}
+              priority
               alt="student learning"
               style={{
                 objectFit: "cover",
@@ -59,6 +60,7 @@ function Hero() {
             <Image
               src={learn1}
               width={280}
+              priority
               alt="student learning"
               className="hero_image mb-[200px] w-[200px] 2xl:w-[350px] border-4 border-[#350203]"
             />
