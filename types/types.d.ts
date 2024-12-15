@@ -10,8 +10,18 @@ export interface Subject {
   slug: string;
   image?: string;
   form?: Class[];
+  name: string;
 }
 
 export interface ChaptersProps {
   limit?: number; // Optional limit prop
+}
+
+export interface Chapter {
+  id: number;
+  title: string;
+  description: string;
+  slug: string;
+  subject: Subject | null;
+  class: Class | null;
 }

@@ -1,22 +1,27 @@
 "use client";
 import { createContext, useContext } from "react";
-import { Subject } from "@/types/types";
+import { Subject, Chapter } from "@/types/types";
 
 interface AppContextProps {
   subjects: Subject[] | null;
+  chapters: Chapter[] | null;
 }
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 export function AppWrapper({
   subjects,
+  chapters,
   children,
 }: Readonly<{
   subjects: Subject[] | null;
+  chapters: Chapter[] | null;
   children: React.ReactNode;
 }>) {
   return (
-    <AppContext.Provider value={{ subjects }}>{children}</AppContext.Provider>
+    <AppContext.Provider value={{ subjects, chapters }}>
+      {children}
+    </AppContext.Provider>
   );
 }
 

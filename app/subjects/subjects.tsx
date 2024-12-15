@@ -73,7 +73,7 @@ function Subjects({ limit }: ChaptersProps) {
       {limit && subjects.length > limit && (
         <Link
           href="/subjects"
-          className="py-3 px-5 sm:ms-4 font-medium mt-12 text-[#350203] border-2 border-[#350203] p-2 text-sm rounded-2xl"
+          className="py-3 px-5 sm:ms-4 font-medium mt-12 text-[#350203] border-2 border-[#350203] hover:bg-[#350203] hover:text-[#f8d6b6] p-2 text-sm rounded-2xl"
         >
           View More
         </Link>

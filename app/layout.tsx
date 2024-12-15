@@ -9,7 +9,7 @@ import Footer from "@/components/navigation/Footer";
 import { AppWrapper } from "@/components/providers/Providers";
 
 // types
-import { Subject } from "@/types/types";
+import { Subject, Chapter } from "@/types/types";
 
 export const metadata: Metadata = {
   title: "Magneto - Unlock Learning, One Day at a Time",
@@ -36,17 +36,39 @@ async function fetchSubjects() {
   }
 }
 
+// fetch chapters
+async function fetchTopics() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chapters/`, {
+      cache: "force-cache",
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch subjects");
+    }
+
+    const chapters: Chapter[] = await res.json();
+    return chapters;
+  } catch (error) {
+    console.error("Error fetching chapters:", error);
+    return [];
+  }
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const subjects = await fetchSubjects();
+  const chapters = await fetchTopics();
   return (
     <html lang="en">
       <body className="font-Poppins font-medium">
         <Navbar />
-        <AppWrapper subjects={subjects}>{children}</AppWrapper>
+        <AppWrapper subjects={subjects} chapters={chapters}>
+          {children}
+        </AppWrapper>
         <Footer />
       </body>
     </html>
