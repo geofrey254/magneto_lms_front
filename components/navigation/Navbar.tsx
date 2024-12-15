@@ -14,7 +14,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="fixed bg-[#fbf5f3] z-10 h-[4vh] w-full flex justify-center items-center py-8 px-4 md:px-12 border-b border-[#350203]">
+    <nav className="fixed bg-[#fbf5f3] z-50 h-[4vh] w-full flex justify-center items-center py-8 px-4 md:px-12 border-b border-[#350203]">
       <div className="container flex justify-between items-center">
         {/* Branding Section */}
         <div>
@@ -41,10 +41,10 @@ function Navbar() {
               <Link href="/subscription">Pricing</Link>
             </li>
             <li>
-              <Link href="#">About Us</Link>
+              <Link href="/about_us">About Us</Link>
             </li>
             <li>
-              <Link href="#">Contact Us</Link>
+              <Link href="/contact_us">Contact Us</Link>
             </li>
           </ul>
         </div>

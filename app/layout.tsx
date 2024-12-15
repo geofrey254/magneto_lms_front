@@ -29,6 +29,7 @@ async function fetchSubjects() {
     }
 
     const subjects: Subject[] = await res.json();
+    console.log("Success Subs");
     return subjects;
   } catch (error) {
     console.error("Error fetching subjects:", error);
@@ -49,6 +50,8 @@ async function fetchTopics() {
     }
 
     const chapters: Chapter[] = await res.json();
+    console.log("Success Chaps");
+
     return chapters;
   } catch (error) {
     console.error("Error fetching chapters:", error);
