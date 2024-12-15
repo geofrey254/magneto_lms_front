@@ -23,5 +23,5 @@ export interface Chapter {
   description: string;
   slug: string;
   subject: Subject | null;
-  class: Class | null;
+  form: Class | null;
 }

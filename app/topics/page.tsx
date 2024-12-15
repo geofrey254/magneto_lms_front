@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaCertificate } from "react-icons/fa6";
 import Search from "@/components/custom/Search";
+import { ViewMoreWrapper } from "@/components/providers/ViewMore";
 
 function page() {
   return (
@@ -43,8 +44,9 @@ function page() {
         <div className="mt-12">
           <Search />
         </div>
-
-        <Chapters />
+        <ViewMoreWrapper limits={9}>
+          <Chapters />
+        </ViewMoreWrapper>
       </div>
     </section>
   );

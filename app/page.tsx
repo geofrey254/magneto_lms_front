@@ -6,13 +6,16 @@ import Download from "@/components/landing_page/Download";
 import FAQ from "@/components/landing_page/FAQ";
 import Categories from "@/components/landing_page/Subjects";
 import Lessons from "@/components/landing_page/Chapters";
+import { ViewMoreWrapper } from "@/components/providers/ViewMore";
 
 export default function Home() {
   return (
     <main className="w-full">
       <Hero />
       <Categories />
-      <Lessons />
+      <ViewMoreWrapper limits={3}>
+        <Lessons />
+      </ViewMoreWrapper>
       <Jumbotron />
       <Why />
       <Download />

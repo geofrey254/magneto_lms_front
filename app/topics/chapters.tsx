@@ -2,20 +2,25 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { ChaptersProps } from "@/types/types";
 import { useAppContext } from "@/components/providers/Providers";
+import { useViewMoreContext } from "@/components/providers/ViewMore";
 
-function Chapters({ limit }: ChaptersProps) {
+function Chapters() {
   const context = useAppContext();
+  const views = useViewMoreContext();
   const { chapters, filteredChapters } = context;
+  const { limits } = views;
   if (!chapters || chapters.length === 0) {
     return <p>No subjects available.</p>;
   }
 
   // Determine the number of chapters to display based on the limit
-  const displayedChapters = limit
-    ? filteredChapters.slice(0, limit)
-    : filteredChapters;
+  const displayLimit = limits || filteredChapters.length;
+  const displayedChapters = filteredChapters.slice(0, displayLimit);
+
+  if (filteredChapters.length === 0) {
+    return <p>No chapters available.</p>;
+  }
 
   return (
     <section className="w-full py-12 flex flex-col gap-6 justify-center items-center">
@@ -28,10 +33,10 @@ function Chapters({ limit }: ChaptersProps) {
             >
               <div className="flex gap-4 text-xs">
                 <span className="text-black bg-[#f8d6b6] p-2 rounded-2xl">
-                  {chap.class?.name ?? "Class Not Assigned"}
+                  {chap.form?.name ?? "Class Not Assigned"}
                 </span>
                 <span className="text-black bg-[#f8d6b6] p-2 rounded-2xl">
-                  {chap.subject?.name ?? "Subject Not Assigned"}
+                  {chap.subject?.title ?? "Subject Not Assigned"}
                 </span>
               </div>
               <h2 className="text-lg font-bold text-black">{chap.title}</h2>
@@ -50,12 +55,6 @@ function Chapters({ limit }: ChaptersProps) {
           <p>No chapters found based on your search criteria.</p>
         )}
       </div>
-
-      {limit && filteredChapters.length > limit && (
-        <Link href="/Lessons" className="mt-4 text-[#350203] font-bold">
-          View More
-        </Link>
-      )}
     </section>
   );
 }

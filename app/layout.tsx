@@ -41,6 +41,7 @@ async function fetchTopics() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chapters/`, {
       cache: "force-cache",
+      next: { revalidate: 1 },
     });
 
     if (!res.ok) {

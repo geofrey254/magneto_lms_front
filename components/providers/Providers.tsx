@@ -28,7 +28,7 @@ export function AppWrapper({
       chap.title.toLowerCase().includes(term) ||
       (chap.description?.toLowerCase().includes(term) ?? false) ||
       (chap.subject?.name?.toLowerCase().includes(term) ?? false) ||
-      (chap.class?.name?.toLowerCase().includes(term) ?? false)
+      (chap.form?.name?.toLowerCase().includes(term) ?? false)
     );
   });
 
