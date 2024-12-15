@@ -3,6 +3,7 @@ import Chapters from "./chapters";
 import Image from "next/image";
 import Link from "next/link";
 import { FaCertificate } from "react-icons/fa6";
+import Search from "@/components/custom/Search";
 
 function page() {
   return (
@@ -38,6 +39,11 @@ function page() {
             </div>
           </div>
         </div>
+
+        <div className="mt-12">
+          <Search />
+        </div>
+
         <Chapters />
       </div>
     </section>
