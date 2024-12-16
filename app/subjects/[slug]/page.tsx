@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Chapter, Subject } from "@/types/types";
+import { FaCertificate } from "react-icons/fa6";
 
 // Dynamic page component for subject chapters
 const SubjectChapters = async ({ params }: Subject) => {
@@ -16,16 +17,41 @@ const SubjectChapters = async ({ params }: Subject) => {
   });
 
   return (
-    <section className="w-full flex justify-center px-4 py-20">
-      <div className="container">
+    <section className="w-full py-16">
+      <div className="">
         <div>
-          <div className="text-center p-8">
-            <h1 className="text-xl font-bold">
-              Topics for Subject:{" "}
-              <span className="text-2xl uppercase">{slug}</span>
-            </h1>
+          <div className="bg-[#350203] courses w-full max-w-full py-8 px-4 md:py-12 md:px-20 grid grid-cols-6 justify-between items-center">
+            <div className="text-content col-start-1 col-end-3">
+              <nav className="w-full max-w-4xl text-base mb-4 text-white rounded-xl font-light">
+                <Link href="/" className="">
+                  Home
+                </Link>
+                <span className="mx-2">/{"/"}</span>
+                <Link href="/subjects" className="font-light">
+                  Subject
+                </Link>
+                <span className="mx-2">/{"/"}</span>
+                <Link href="/" className="text-[#f8d6b6] font-medium">
+                  {slug}
+                </Link>
+              </nav>
+              <div>
+                <h3 className="text-white text-3xl md:text-5xl text-nowrap font-light uppercase">
+                  {slug}
+                </h3>
+              </div>
+            </div>
+            <div className="image-content col-end-9 col-span-3 flex items-center gap-0 md:gap-12">
+              <div>
+                <FaCertificate
+                  className="text-[#f8d6b6] w-6/12 md:w-full"
+                  size={100}
+                />
+              </div>
+            </div>
           </div>
-          <div>
+
+          <div className="pt-8">
             {sortedChapters.map((chap) => (
               <div
                 key={chap.id}
