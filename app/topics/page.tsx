@@ -49,7 +49,7 @@ function page() {
         <div className="mt-4 md:mt-12 p-8 md:p-0">
           <Search />
         </div>
-        <div className="py-2 px-4">
+        <div className="py-2 px-4 md:py-8">
           <ViewMoreWrapper limits={9}>
             <Chapters />
           </ViewMoreWrapper>
