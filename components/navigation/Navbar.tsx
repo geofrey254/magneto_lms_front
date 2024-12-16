@@ -2,9 +2,11 @@
 import React, { useState } from "react";
 import { MdOutlineMenuBook } from "react-icons/md";
 import { BiSolidFoodMenu } from "react-icons/bi";
-import { FaCertificate, FaSchool } from "react-icons/fa6";
-import { TbBooks } from "react-icons/tb";
+import { FaCertificate, FaMoneyCheck, FaSchool } from "react-icons/fa6";
+import { TbBooks, TbListTree } from "react-icons/tb";
 import Link from "next/link";
+import { LiaSchoolSolid } from "react-icons/lia";
+import { GiTalk } from "react-icons/gi";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(true);
@@ -97,6 +99,38 @@ function Navbar() {
               </div>
               <Link href="/subjects" onClick={handleNav}>
                 Subjects
+              </Link>
+            </li>
+            <li className="flex gap-4 justify-start items-center">
+              <div className="bg-[#f8d6b6] rounded-full p-2">
+                <TbListTree size={15} className="text-[#350203]" />
+              </div>
+              <Link href="/topics" onClick={handleNav}>
+                Topics
+              </Link>
+            </li>
+            <li className="flex gap-4 items-center">
+              <div className="bg-[#f8d6b6] rounded-full p-2">
+                <FaMoneyCheck size={15} className="text-[#350203]" />
+              </div>
+              <Link href="/subjects" onClick={handleNav}>
+                Pricing
+              </Link>
+            </li>
+            <li className="flex gap-4 justify-start items-center">
+              <div className="bg-[#f8d6b6] rounded-full p-2">
+                <LiaSchoolSolid size={15} className="text-[#350203]" />
+              </div>
+              <Link href="/about_us" onClick={handleNav}>
+                About Us
+              </Link>
+            </li>
+            <li className="flex gap-4 items-center">
+              <div className="bg-[#f8d6b6] rounded-full p-2">
+                <GiTalk size={15} className="text-[#350203]" />
+              </div>
+              <Link href="/contact_us" onClick={handleNav}>
+                Contact Us
               </Link>
             </li>
           </ul>

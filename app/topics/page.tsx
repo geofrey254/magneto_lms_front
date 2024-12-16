@@ -10,7 +10,7 @@ function page() {
   return (
     <section className="mx-auto w-full pt-16">
       <div>
-        <div className="bg-[#350203] courses w-full max-w-full md:py-12 md:px-20 grid grid-cols-6 justify-between items-center">
+        <div className="bg-[#350203] courses w-full max-w-full py-8 px-4 md:py-12 md:px-20 grid grid-cols-6 justify-between items-center">
           <div className="text-content col-start-1 col-end-3">
             <nav className="w-full max-w-4xl text-base mb-4 text-white rounded-xl font-light">
               <Link href="/" className="hover:underline">
@@ -22,12 +22,17 @@ function page() {
               </Link>
             </nav>
             <div>
-              <h3 className="text-white text-5xl font-light">All Topics</h3>
+              <h3 className="text-white text-3xl md:text-5xl text-nowrap font-light">
+                All Topics
+              </h3>
             </div>
           </div>
-          <div className="image-content col-end-8 col-span-3 flex items-center gap-12">
+          <div className="image-content col-end-9 col-span-2 flex items-center gap-0 md:gap-12">
             <div>
-              <FaCertificate className="text-[#f8d6b6] cert" size={80} />
+              <FaCertificate
+                className="text-[#f8d6b6] cert w-6/12 md:w-full"
+                size={80}
+              />
             </div>
             <div>
               <Image
@@ -35,18 +40,20 @@ function page() {
                 width={350}
                 height={350}
                 alt="Learning illustration"
-                className="w-40 h-40 object-cover border-2 border-[#f8d6b6] rounded-full"
+                className="w-14 h-14 md:w-40 md:h-40 object-cover border-2 border-[#f8d6b6] rounded-full"
               />
             </div>
           </div>
         </div>
 
-        <div className="mt-12">
+        <div className="mt-4 md:mt-12 p-8 md:p-0">
           <Search />
         </div>
-        <ViewMoreWrapper limits={9}>
-          <Chapters />
-        </ViewMoreWrapper>
+        <div className="py-2 px-4">
+          <ViewMoreWrapper limits={9}>
+            <Chapters />
+          </ViewMoreWrapper>
+        </div>
       </div>
     </section>
   );

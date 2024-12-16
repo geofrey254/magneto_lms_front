@@ -4,17 +4,17 @@ import Link from "next/link";
 
 function page() {
   return (
-    <section className="overflow-hidden pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] bg-white dark:bg-dark">
+    <section className="overflow-hidden pt-20 pb-12 px-4 md:px-0 xl:pt-32 xl:px-20 lg:pt-[120px] lg:pb-[90px] bg-white dark:bg-dark">
       <div className="container mx-auto">
-        <div className="flex flex-wrap items-center justify-between -mx-4">
-          <div className="w-full px-4 lg:w-6/12">
+        <div className="flex flex-wrap items-center justify-center md:justify-between xl:justify-around -mx-4">
+          <div className="w-9/12 px-4 xl:px-0 md:w-5/12 xl:w-1/3">
             <div className="flex items-center -mx-3 sm:-mx-4">
               <div className="w-10/12 px-3 sm:px-4 xl:w-1/2">
                 <div className="py-3 sm:py-4">
                   <Image
                     src="https://images.unsplash.com/photo-1620829813947-ef4246827355?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c3R1ZGVudHN8ZW58MHwxfDB8fHww"
                     alt=""
-                    className="w-full rounded-2xl"
+                    className="w-full rounded-2xl border-2 border-[#350203]"
                     width={300}
                     height={300}
                   />
@@ -23,7 +23,7 @@ function page() {
                   <Image
                     src="https://images.pexels.com/photos/4144228/pexels-photo-4144228.jpeg?auto=compress&cs=tinysrgb&w=600"
                     alt=""
-                    className="w-10/12 rounded-2xl"
+                    className="w-10/12 rounded-2xl border-2 border-[#350203]"
                     width={300}
                     height={300}
                   />
@@ -34,7 +34,7 @@ function page() {
                   <Image
                     src="https://i.ibb.co/9y7nYCD/image-3.jpg"
                     alt=""
-                    className="w-10/12 rounded-2xl"
+                    className="w-10/12 rounded-2xl border-2 border-[#350203]"
                     width={300}
                     height={300}
                   />
@@ -65,7 +65,7 @@ function page() {
               </p>
               <Link
                 href="/"
-                className="inline-flex items-center justify-center py-3 text-base font-medium text-center text-black border border-transparent rounded-md px-7 bg-primary hover:bg-opacity-90"
+                className="py-3 px-5 font-medium text-[#350203] border-2 border-[#350203] hover:bg-[#350203] hover:text-[#f8d6b6] p-2 text-sm rounded-2xl"
               >
                 Get Started
               </Link>

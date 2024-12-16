@@ -6,14 +6,14 @@ import { IoIosMailUnread } from "react-icons/io";
 function page() {
   return (
     <section
-      className="contact bg-[#f3e8de] w-full max-w-full px-4 pt-20 pb-6 md:p-16 md:pt-24 xl:px-24 2xl:p-24 "
+      className="contact bg-[#f3e8de] w-full max-w-full px-4 pt-28 pb-6 md:p-16 md:pt-24 xl:px-24 2xl:p-24 "
       id="cont"
     >
-      <div className="container grid grid-cols-2 md:grid-cols-2 md:gap-36 xl:gap-24 mx-auto items-center">
+      <div className="container grid grid-cols-1 md:grid-cols-2 md:gap-36 xl:gap-24 mx-auto items-center">
         <div className="left ">
           <div className="mb-12 text-left md:text-left">
             <div className="flex gap-4 items-center">
-              <h4 className="text-[#350203] mb-1 md:mb-1 font-semibold">
+              <h4 className="text-[#350203] mb-1 md:mb-1 font-semibold text-sm md:text-base">
                 CONTACT US
               </h4>
             </div>
@@ -30,35 +30,35 @@ function page() {
             </p>
           </div>
           <hr className="border-[#350203]" />
-          <div className="grid gap-6 md:flex md:gap-12 items-center mt-12">
-            <div className="link_1 flex items-center gap-6 bg-white p-4 md:p-4 xl:p-4 rounded-xl">
+          <div className="grid gap-6 md:flex md:gap-12 items-center mt-4 md:mt-12">
+            <div className="link_1 flex items-center gap-6 bg-white p-4 md:p-2 xl:p-4 rounded-xl border-2 border-[#350203] w-10/12 md:w-full">
               <FaPhoneAlt
-                size={50}
+                size={40}
                 className="bg-[#350203] text-white p-2 rounded-xl shadow-2xl shadow-[#350203]"
               />
               <div className="">
                 <h6 className="md:text-sm">Call Us On:</h6>
-                <Link href="#" className="font-bold text-nowrap text-md">
+                <Link href="#" className="font-bold text-nowrap text-sm">
                   +254742 954513
                 </Link>
               </div>
             </div>
-            <div className="link_2 flex items-center gap-6 bg-white p-4 md:p-4 xl:p-4 rounded-xl">
+            <div className="link_2 flex items-center gap-6 bg-white p-4 md:p-2 xl:p-4 rounded-xl border-2 border-[#350203] w-10/12 md:w-full">
               <IoIosMailUnread
-                size={50}
+                size={40}
                 className="bg-[#350203] text-white p-2 rounded-xl shadow-2xl shadow-[#350203]"
               />
               <div className="">
                 <h6 className="md:text-sm">Send Us an Email:</h6>
-                <Link href="#" className="font-bold text-md">
+                <Link href="#" className="font-bold text-sm">
                   support@Magneto.com
                 </Link>
               </div>
             </div>
           </div>
         </div>
-        <div className="right ">
-          <h4 className="text-2xl md:text-3xl font-bold text-center mb-8">
+        <div className="right mt-16 md:mt-0">
+          <h4 className="text-2xl md:text-3xl font-bold md:text-center mb-8">
             Get In Touch With Us
           </h4>
           <form action="" className="text-center">
