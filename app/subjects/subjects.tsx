@@ -14,11 +14,16 @@ function Subjects({ limit }: ChaptersProps) {
   }
 
   const displayedChapters = limit ? subjects.slice(0, limit) : subjects;
+  const sortedChapters = displayedChapters.sort((a, b) => {
+    const titleA = a.title?.toLowerCase() || "";
+    const titleB = b.title?.toLowerCase() || "";
+    return titleA.localeCompare(titleB);
+  });
 
   return (
     <section className="pt-12 flex flex-col justify-center items-center">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {displayedChapters.map((sub) => (
+        {sortedChapters.map((sub) => (
           <div
             key={sub.id}
             className="border border-[#350203] shadow rounded-md p-4 max-w-sm w-full mx-auto"

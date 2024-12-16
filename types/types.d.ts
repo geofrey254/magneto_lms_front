@@ -11,6 +11,9 @@ export interface Subject {
   image?: string;
   form?: Class[];
   name: string;
+  params: {
+    slug: string;
+  };
 }
 
 export interface ChaptersProps {
