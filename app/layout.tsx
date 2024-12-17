@@ -7,7 +7,7 @@ import Footer from "@/components/navigation/Footer";
 
 // providers
 import { AppWrapper } from "@/components/providers/Providers";
-
+import { AuthProvider } from "@/components/providers/AuthProvider";
 // types
 import { Subject, Chapter } from "@/types/types";
 
@@ -68,13 +68,15 @@ export default async function RootLayout({
   const chapters = await fetchTopics();
   return (
     <html lang="en">
-      <body className="font-Poppins font-medium">
-        <Navbar />
-        <AppWrapper subjects={subjects} chapters={chapters}>
-          {children}
-        </AppWrapper>
-        <Footer />
-      </body>
+      <AuthProvider>
+        <body className="font-Poppins font-medium">
+          <Navbar />
+          <AppWrapper subjects={subjects} chapters={chapters}>
+            {children}
+          </AppWrapper>
+          <Footer />
+        </body>
+      </AuthProvider>
     </html>
   );
 }

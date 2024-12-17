@@ -1,16 +1,13 @@
 "use client"; // Ensures this code runs in the client environment
 
-import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 // import GoogleSignInButton from "../custom/Googlebtn";
 import Link from "next/link";
 import { FaCertificate } from "react-icons/fa6";
-const initialState = {
-  identifier: "",
-  password: "",
-};
+
+// providers
+import { useAuth } from "../providers/AuthProvider";
 
 type FormErrorsT = {
   identifier?: string[];
@@ -23,69 +20,20 @@ export function SigninForm() {
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
-
-  const [data, setData] = useState(initialState);
   const [errors, setErrors] = useState<FormErrorsT>({});
-  const [loading, setLoading] = useState(false);
-  const searchParams = useSearchParams();
-  const callbackUrl =
-    searchParams.get("callbackUrl") ||
-    "/" ||
-    `${process.env.NEXT_PUBLIC_WEB_URL}`;
-  const router = useRouter();
+  const { data, handleChange, handleSubmit } = useAuth();
 
-  // const { setAuthenticated } = useAuth(); // Access auth context to update authentication state
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setData({
-      ...data,
-      [e.target.name]: e.target.value,
-    });
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
+    setErrors({}); // Clear any previous errors
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: data.identifier,
-            password: data.password,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        setErrors({ generalError: errorData.detail || "Login failed" });
-        setLoading(false);
-        return;
-      }
-
-      const responseData = await response.json();
-      const token = responseData.access;
-
-      // Store the token in cookies
-      document.cookie = `token=${token}; path=/; max-age=1800; secure; samesite=strict`;
-
-      // Update the authentication state
-      // setAuthenticated(true); // Trigger a recheck and update state
-
-      router.push(callbackUrl); // Redirect to callback URL after successful login
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      await handleSubmit(e);
     } catch (error) {
-      setErrors({ generalError: "An unexpected error occurred" });
-    } finally {
-      setLoading(false);
+      if (error instanceof Error) {
+        setErrors({ generalError: error.message });
+      }
     }
-  }
+  };
 
   return (
     <section className="p-0">
@@ -104,7 +52,7 @@ export function SigninForm() {
               Sign in to your account
             </h1>
             <form
-              onSubmit={handleSubmit}
+              onSubmit={handleFormSubmit}
               method="post"
               className="space-y-4 md:space-y-6"
               action="#"
@@ -181,8 +129,6 @@ export function SigninForm() {
               </div>
               <button
                 type="submit"
-                disabled={loading}
-                aria-disabled={loading}
                 className="w-full text-white bg-[#350203] hover:bg-[#350203a9] focus:ring-4 focus:outline-none focus:bg-[#35020330] font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 Sign in
