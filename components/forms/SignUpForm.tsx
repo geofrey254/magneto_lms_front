@@ -6,6 +6,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 // import GoogleSignInButton from "../custom/Googlebtn";
 // import GoogleSignInError from "../custom/GoogleSignInError";
 import { useAuth } from "../providers/AuthProvider";
+import GoogleSignInButton from "../buttons/Googlebtn";
 
 type FormErrorsT = {
   identifier?: string[];
@@ -37,12 +38,15 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="w-full max-w-md bg-white rounded-lg shadow dark:border sm:max-w-md p-8 md:p-0 xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+    <div className="w-full md:py-24 bg-white md:bg-transparent md:px-12 xl:px-24">
       <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
           Create an account
         </h1>
-        <form className="space-y-4 md:space-y-6" onSubmit={handleFormSubmit}>
+        <form
+          className="space-y-4 md:space-y-2 xl:space-y-6"
+          onSubmit={handleFormSubmit}
+        >
           <div className="mb-3">
             <label
               htmlFor="username"
@@ -156,8 +160,8 @@ export default function SignUpForm() {
             <div className="flex-grow border-t border-gray-300"></div>
           </div>
 
-          {/* <GoogleSignInButton />
-          <GoogleSignInError /> */}
+          <GoogleSignInButton />
+          {/* <GoogleSignInError /> */}
 
           <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
             Already have an account?&nbsp;

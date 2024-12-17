@@ -1,45 +1,34 @@
 "use client";
-import { useEffect, useState } from "react";
 import SignUpForm from "./SignUpForm";
-import Link from "next/link";
+import Image from "next/image";
 
 export default function SignUp() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    // Check if JWT token exists in localStorage or cookies
-    const token = localStorage.getItem("jwtToken");
-
-    if (token) {
-      // Optionally, you can add logic to validate the token (check expiration or decode)
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
-  }, []);
-
   return (
-    <section>
-      <div className="flex flex-col items-center justify-center mx-auto lg:py-6">
-        <div className="mx-auto my-2 p-8 md:p-0 max-w-lg rounded-sm">
-          <h2 className="text-center text-2xl text-[#350203] mb-8 font-bold">
-            Sign Up
-          </h2>
-          {isAuthenticated ? (
-            <p className="text-center">You are already signed in.</p>
-          ) : (
-            <div>
-              <p className="mb-4 text-center md:text-base">
-                Sign up for a new account or{" "}
-                <Link href="/signin" className="underline">
-                  sign in
-                </Link>{" "}
-                when you already have an account.
-              </p>
-              <SignUpForm />
-            </div>
-          )}
+    <section className="w-full pt-16 md:pt-0">
+      <div className="grid grid-cols-1 md:grid-cols-2 p-8 md:p-0">
+        <div className="bg-sign hidden md:flex md:flex-col justify-center items-center gap-2 md:gap-0 p-4 md:p-0">
+          <div>
+            <Image
+              src="/img/lap.png"
+              alt="laptop screen"
+              width={350}
+              height={350}
+              quality={100}
+              className="w-10/12 md:w-[300px] xl:w-[400px]"
+            />
+          </div>
+          <div className="md:mt-8 text-center">
+            <h3 className="text-white font-light text-lg md:text-3xl xl:text-5xl">
+              Welcome to <span className="font-semibold">Magneto</span>
+            </h3>
+            <p className="text-white font-normal text-xs md:text-sm xl:text-base mt-3">
+              Learn Your Way, Every Day – Quality Education, Only When You Need
+              It!
+            </p>
+          </div>
         </div>
+
+        <SignUpForm />
       </div>
     </section>
   );

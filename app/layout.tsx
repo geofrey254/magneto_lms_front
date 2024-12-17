@@ -8,6 +8,7 @@ import Footer from "@/components/navigation/Footer";
 // providers
 import { AppWrapper } from "@/components/providers/Providers";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+
 // types
 import { Subject, Chapter } from "@/types/types";
 
