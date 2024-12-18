@@ -43,7 +43,7 @@ function Chapters() {
               <p className="text-gray-600 text-sm">{chap.description}</p>
               <div className="">
                 <Link
-                  href={`/Lessons/${chap.slug}`}
+                  href={`/topics/${chap.slug}`}
                   className="bg-[#350203] rounded-2xl px-4 py-1 text-xs text-[#f8d6b6] text-center"
                 >
                   Start

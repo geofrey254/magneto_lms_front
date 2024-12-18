@@ -140,6 +140,7 @@ body {
 
 .courses {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1006%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='rgba(53%2c 2%2c 3%2c 1)'%3e%3c/rect%3e%3cpath d='M1472.62 415.85C1276.53 413.3 1030.05 197.28 722.54 186.25 415.03 175.22 462.16-69.7 347.5-83.18' stroke='rgba(248%2c 214%2c 182%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1715.94 352.44C1577.05 353.02 1458.39 469.1 1171.8 464.44 885.2 459.78 805.1 23.08 627.65-8.36' stroke='rgba(248%2c 214%2c 182%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1448.86 350.67C1284.16 347.52 1152.56 136.64 827.19 132.27 501.83 127.9 366.43-32.92 205.53-34.36' stroke='rgba(248%2c 214%2c 182%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1495.58 120.46C1307.35 124.42 1144.24 378.36 787.9 378.06 431.56 377.76 286.1-31.91 80.22-47.92' stroke='rgba(248%2c 214%2c 182%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1658.88 407.32C1517.8 398.9 1430.89 146.75 1161.53 138.52 892.17 130.29 793.8-6.53 664.18-8.05' stroke='rgba(248%2c 214%2c 182%2c 1)' stroke-width='2'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1006'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+
 }
 
 .bg-sign {

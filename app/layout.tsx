@@ -23,6 +23,7 @@ async function fetchSubjects() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/subjects/`, {
       cache: "force-cache",
+      next: { revalidate: 1 },
     });
 
     if (!res.ok) {
@@ -53,7 +54,7 @@ async function fetchTopics() {
     const chapters: Chapter[] = await res.json();
     console.log("Success Chaps");
 
-    return chapters;
+    return chapters.reverse();
   } catch (error) {
     console.error("Error fetching chapters:", error);
     return [];

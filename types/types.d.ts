@@ -27,4 +27,7 @@ export interface Chapter {
   slug: string;
   subject: Subject | null;
   form: Class | null;
+  params: {
+    slug: string;
+  };
 }

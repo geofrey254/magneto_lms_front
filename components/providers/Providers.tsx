@@ -6,6 +6,7 @@ interface AppContextProps {
   subjects: Subject[] | null;
   chapters: Chapter[] | null;
   filteredChapters: Chapter[];
+  latestChapters: Chapter[];
   searchTerm: string;
   setSearchTerm: (term: string) => void;
 }
@@ -32,12 +33,15 @@ export function AppWrapper({
     );
   });
 
+  const latestChapters: Chapter[] = (chapters ?? []).slice(0, 3).reverse();
+
   return (
     <AppContext.Provider
       value={{
         subjects,
         chapters,
         filteredChapters,
+        latestChapters,
         searchTerm,
         setSearchTerm,
       }}

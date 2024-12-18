@@ -51,11 +51,11 @@ const SubjectChapters = async ({ params }: Subject) => {
             </div>
           </div>
 
-          <div className="pt-8">
+          <div className="pt-8 px-8 md:px-0">
             {sortedChapters.map((chap) => (
               <div
                 key={chap.id}
-                className="border flex flex-col gap-4 border-[#350203] shadow rounded-md p-8 max-w-sm w-full mx-auto"
+                className="border flex flex-col gap-4 border-[#350203] shadow rounded-md p-4 md:p-8 max-w-sm w-full mx-auto"
               >
                 <div className="flex gap-4 text-xs">
                   <span className="text-black bg-[#f8d6b6] p-2 rounded-2xl">
@@ -70,7 +70,7 @@ const SubjectChapters = async ({ params }: Subject) => {
 
                 <div className="flex items-center">
                   <Link
-                    href={`/Lessons/${chap.slug}`}
+                    href={`/topics/${chap.slug}`}
                     className="bg-[#350203] hover:bg-[#f8d6b6] flex items-center justify-center rounded-2xl px-4 py-1 text-sm text-[#f8d6b6] hover:text-[#350203] text-center"
                   >
                     Start
