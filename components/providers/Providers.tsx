@@ -33,7 +33,7 @@ export function AppWrapper({
     );
   });
 
-  const latestChapters: Chapter[] = (chapters ?? []).slice(0, 3).reverse();
+  const latestChapters: Chapter[] = (chapters ?? []).slice(0, 9).reverse();
 
   return (
     <AppContext.Provider

@@ -5,7 +5,8 @@ import { FaCertificate } from "react-icons/fa6";
 
 // latestchapters
 import Latest from "../sidebar/latest";
-import Related from "../sidebar/related";
+import Share from "../sidebar/share";
+import AIAgentSidebar from "../sidebar/AIAgentSidebar";
 
 // Fetch all chapter slugs for static paths generation
 export async function generateStaticParams() {
@@ -83,12 +84,15 @@ async function TopicPage({ params }: Chapter) {
             <div dangerouslySetInnerHTML={{ __html: lesson.lesson_content }} />
           </div>
         </div>
-        <div className="md:col-span-4 px-2 flex flex-col gap-6">
+        <div className="md:col-span-4 py-8 md:py-0 md:px-2 flex flex-col gap-6">
           <div>
-            <Related subjectSlug={lesson.subject?.slug} />
+            <AIAgentSidebar />
           </div>
           <div>
             <Latest />
+          </div>
+          <div>
+            <Share />
           </div>
         </div>
       </div>
