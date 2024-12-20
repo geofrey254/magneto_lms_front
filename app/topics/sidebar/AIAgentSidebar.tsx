@@ -4,6 +4,8 @@ import { BiSend } from "react-icons/bi";
 import { FaWindowClose } from "react-icons/fa";
 import { FaCertificate } from "react-icons/fa6";
 import { PiStudentFill } from "react-icons/pi";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 // Define the structure for a message
 interface Message {
@@ -15,6 +17,9 @@ interface Message {
 interface DialogProps {
   onClose: () => void;
 }
+
+// Utility function to handle API calls
+import { sendPrompt } from "@/@/utils/api";
 
 const Page: FC = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
@@ -41,43 +46,20 @@ const Dialog: FC<DialogProps> = ({ onClose }) => {
   const handleSend = async () => {
     if (input.trim() === "") return;
 
-    // Add user message to the chat
     const userMessage: Message = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
 
-    // Send message to the backend and get response
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/magneto_agent/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ message: input }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch response from Magneto API.");
-      }
-
-      const data: {
-        prompt: string;
-        magneto: { session_id: string; outputs: string };
-      } = await response.json();
-      const botMessage: Message = {
-        sender: "grok",
-        text: data.magneto.outputs,
-      }; // Use only the outputs field
+      const botResponse = await sendPrompt(input);
+      const botMessage: Message = { sender: "grok", text: botResponse }; // Already a string
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
+      console.error("Error communicating with API:", error);
       const errorMessage: Message = {
         sender: "grok",
         text: "Sorry, something went wrong. Please try again later.",
       };
       setMessages((prev) => [...prev, errorMessage]);
-      console.error("Error communicating with API:", error);
     }
 
     setInput(""); // Clear the input field
@@ -99,10 +81,7 @@ const Dialog: FC<DialogProps> = ({ onClose }) => {
   }, [messages]);
 
   useEffect(() => {
-    // Disable scrolling
     document.body.style.overflow = "hidden";
-
-    // Re-enable scrolling when the component unmounts
     return () => {
       document.body.style.overflow = "";
     };
@@ -141,12 +120,72 @@ const Dialog: FC<DialogProps> = ({ onClose }) => {
                     : "self-start bg-[#350203] rounded-2xl p-2 text-white text-base font-normal"
                 }`}
               >
-                {msg.text}
+                <Markdown
+                  className="markdown-content"
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    h1: ({ ...props }) => (
+                      <h1 className="text-2xl font-bold mb-2" {...props} />
+                    ),
+                    h2: ({ ...props }) => (
+                      <h2 className="text-xl font-semibold mb-2" {...props} />
+                    ),
+                    h3: ({ ...props }) => (
+                      <h3 className="text-lg font-medium mb-1" {...props} />
+                    ),
+                    p: ({ ...props }) => (
+                      <p
+                        className="text-sm leading-relaxed mb-2 tracking-wider"
+                        {...props}
+                      />
+                    ),
+                    ul: ({ ...props }) => (
+                      <ul
+                        className="list-disc list-inside mt-4 mb-2 ml-4"
+                        {...props}
+                      />
+                    ),
+                    ol: ({ ...props }) => (
+                      <ol
+                        className="list-decimal list-inside mb-2 ml-4"
+                        {...props}
+                      />
+                    ),
+                    li: ({ ...props }) => (
+                      <li className="mb-1 text-sm" {...props} />
+                    ),
+                    blockquote: ({ ...props }) => (
+                      <blockquote
+                        className="border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-2"
+                        {...props}
+                      />
+                    ),
+                    code: ({ inline, ...props }) =>
+                      inline ? (
+                        <code
+                          className="bg-gray-100 text-red-600 px-1 py-0.5 rounded"
+                          {...props}
+                        />
+                      ) : (
+                        <pre className="bg-gray-800 text-white p-2 rounded mb-2">
+                          <code {...props} />
+                        </pre>
+                      ),
+                    strong: ({ ...props }) => (
+                      <strong className="font-bold text-white" {...props} />
+                    ),
+                    em: ({ ...props }) => (
+                      <em className="italic text-white" {...props} />
+                    ),
+                  }}
+                >
+                  {msg.text}
+                </Markdown>
               </div>
               {msg.sender === "user" && (
                 <PiStudentFill
                   size={40}
-                  className="bg-gradient-to-tl from-amber-900 to-red-300 rounded-full  p-2 text-white"
+                  className="bg-gradient-to-tl from-amber-900 to-red-300 rounded-full p-2 text-white"
                 />
               )}
             </div>
