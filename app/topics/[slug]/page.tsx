@@ -7,6 +7,9 @@ import { FaCertificate } from "react-icons/fa6";
 import Latest from "../sidebar/latest";
 import Share from "../sidebar/share";
 import AIAgentSidebar from "../sidebar/AIAgentSidebar";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 // Fetch all chapter slugs for static paths generation
 export async function generateStaticParams() {
@@ -81,7 +84,67 @@ async function TopicPage({ params }: Chapter) {
           </div>
           {/* Lesson Content */}
           <div className="text-[#350203] prose prose-img:w-full prose-p:text-[#350203] prose-headings:text-[#350203] prose-strong:text-[#350203]">
-            <div dangerouslySetInnerHTML={{ __html: lesson.lesson_content }} />
+            {/* <div dangerouslySetInnerHTML={{ __html: lesson.lesson_content }} /> */}
+            <ReactMarkdown
+              className="markdown-content"
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+              // components={{
+              //   h1: ({ ...props }) => (
+              //     <h1 className="text-2xl font-bold mb-2" {...props} />
+              //   ),
+              //   h2: ({ ...props }) => (
+              //     <h2 className="text-xl font-semibold mb-2" {...props} />
+              //   ),
+              //   h3: ({ ...props }) => (
+              //     <h3 className="text-lg font-medium mb-1" {...props} />
+              //   ),
+              //   p: ({ ...props }) => (
+              //     <p
+              //       className="text-sm leading-relaxed mb-2 tracking-wider"
+              //       {...props}
+              //     />
+              //   ),
+              //   ul: ({ ...props }) => (
+              //     <ul
+              //       className="list-disc list-inside mt-4 mb-2 ml-4"
+              //       {...props}
+              //     />
+              //   ),
+              //   ol: ({ ...props }) => (
+              //     <ol
+              //       className="list-decimal list-inside mb-2 ml-4"
+              //       {...props}
+              //     />
+              //   ),
+              //   li: ({ ...props }) => (
+              //     <li className="mb-1 text-sm" {...props} />
+              //   ),
+              //   blockquote: ({ ...props }) => (
+              //     <blockquote
+              //       className="border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-2"
+              //       {...props}
+              //     />
+              //   ),
+              //   code: ({ inline, ...props }) =>
+              //     inline ? (
+              //       <code
+              //         className="bg-gray-100 text-red-600 px-1 py-0.5 rounded"
+              //         {...props}
+              //       />
+              //     ) : (
+              //       <pre className="bg-gray-800 text-white p-2 rounded mb-2">
+              //         <code {...props} />
+              //       </pre>
+              //     ),
+              //   strong: ({ ...props }) => (
+              //     <strong className="font-bold" {...props} />
+              //   ),
+              //   em: ({ ...props }) => <em className="italic " {...props} />,
+              // }}
+            >
+              {lesson.lesson_content}
+            </ReactMarkdown>
           </div>
         </div>
         <div className="md:col-span-4 py-8 md:py-0 md:px-2 flex flex-col gap-6">

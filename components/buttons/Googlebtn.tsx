@@ -2,7 +2,7 @@
 
 import { FcGoogle } from "react-icons/fc";
 
-const googleLoginUrl = `https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http://localhost:8000/user/dj-rest-auth/google/callback/&prompt=consent&response_type=code&client_id=401225312513-7l6mmaaees3vb9brjcfbtqac01bob1tv.apps.googleusercontent.com&scope=openid%20email%20profile&access_type=offline`;
+const googleLoginUrl = process.env.NEXT_PUBLIC_GOOGLE_LOGIN_URL;
 
 export default function GoogleSignInButton() {
   const reachGoogle = () => {

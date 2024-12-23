@@ -88,8 +88,8 @@ const Dialog: FC<DialogProps> = ({ onClose }) => {
   }, []);
 
   return (
-    <section className="font-Montserrat tracking-wide fixed inset-0 mt-16 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="chat-bg rounded-lg shadow-xl w-full max-w-full h-[90vh] flex flex-col">
+    <section className="font-Montserrat tracking-wide fixed inset-0 mt-16 flex items-center justify-center bg-black bg-opacity-50 z-10">
+      <div className="chat-bg rounded-lg shadow-xl w-full max-w-full h-[80vh] md:h-[90vh] flex flex-col">
         <div className="flex justify-between items-center p-4 bg-[#350203]">
           <h2 className="text-lg font-light text-white">
             Magneto Learning Assistant
@@ -194,7 +194,7 @@ const Dialog: FC<DialogProps> = ({ onClose }) => {
         </div>
 
         <div className="p-3 flex justify-center items-center">
-          <div className="w-1/2 bg-[#350203] flex rounded-full border border-white">
+          <div className="w-full md:w-1/2 bg-[#350203] flex rounded-full border border-white">
             <input
               type="text"
               className="flex-1 px-4 py-2 rounded-full placeholder:font-normal placeholder:text-[#350203]"
