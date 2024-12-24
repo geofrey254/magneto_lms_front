@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineMenuBook } from "react-icons/md";
 import { BiSolidFoodMenu } from "react-icons/bi";
 import { FaCertificate, FaMoneyCheck, FaSchool } from "react-icons/fa6";
@@ -7,13 +7,19 @@ import { TbBooks, TbListTree } from "react-icons/tb";
 import Link from "next/link";
 import { LiaSchoolSolid } from "react-icons/lia";
 import { GiTalk } from "react-icons/gi";
+import { useAuth } from "../providers/AuthProvider";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(true);
+  const { isAuthenticated, handleLogout } = useAuth();
 
   const handleNav = () => {
     setMenuOpen(!menuOpen);
   };
+
+  useEffect(() => {
+    console.log("isAuthenticated", isAuthenticated);
+  }, [isAuthenticated]);
 
   return (
     <nav className="fixed bg-[#fbf5f3] z-50 h-[4vh] w-full flex justify-center items-center py-8 px-4 md:px-12 border-b border-[#350203]">
@@ -60,26 +66,49 @@ function Navbar() {
           }
         >
           <div className="flex flex-col gap-6 text-[#f8d6b6]">
-            <ul className="flex mt-6 px-4 justify-between">
-              <li>
-                <Link
-                  href="/signin"
-                  onClick={handleNav}
-                  className="text-[#f8d6b6] border-2 border-[#f8d6b6] px-8 py-2 rounded-2xl"
-                >
-                  Log In
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/signup"
-                  onClick={handleNav}
-                  className="bg-[#f8d6b6] hover:bg-[#facba0] rounded-2xl px-4 py-2 text-[#350203]"
-                >
-                  Join Now
-                </Link>
-              </li>
-            </ul>
+            {isAuthenticated ? (
+              <ul className="flex mt-6 px-4 justify-between">
+                <li>
+                  <Link
+                    href="/dashboard"
+                    onClick={handleNav}
+                    className="text-[#f8d6b6] border-2 border-[#f8d6b6] px-8 py-2 rounded-2xl"
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/"
+                    onClick={handleLogout}
+                    className="bg-[#f8d6b6] hover:bg-[#facba0] rounded-2xl px-4 py-2 text-[#350203]"
+                  >
+                    Logout
+                  </Link>
+                </li>
+              </ul>
+            ) : (
+              <ul className="flex mt-6 px-4 justify-between">
+                <li>
+                  <Link
+                    href="/signin"
+                    onClick={handleNav}
+                    className="text-[#f8d6b6] border-2 border-[#f8d6b6] px-8 py-2 rounded-2xl"
+                  >
+                    Log In
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/signup"
+                    onClick={handleNav}
+                    className="bg-[#f8d6b6] hover:bg-[#facba0] rounded-2xl px-4 py-2 text-[#350203]"
+                  >
+                    Join Now
+                  </Link>
+                </li>
+              </ul>
+            )}
             <hr />
           </div>
 
@@ -139,17 +168,35 @@ function Navbar() {
         {/* Right side of the Navbar */}
         <div className="flex">
           <div className="hidden md:flex gap-6 justify-center items-center font-semibold text-sm">
-            <>
-              <Link
-                href="/signup"
-                className="bg-[#f8d6b6] hover:bg-[#facba0] rounded-2xl px-4 py-2 text-[#350203]"
-              >
-                Join Now
-              </Link>
-              <Link href="/signin" className="text-[#350203]">
-                Log In
-              </Link>
-            </>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  className="text-[#350203] border-2 border-[#350203] px-8 py-2 rounded-2xl"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href="/"
+                  onClick={handleLogout}
+                  className="bg-[#f8d6b6] hover:bg-[#facba0] rounded-2xl px-4 py-2 text-[#350203]"
+                >
+                  Logout
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/signup"
+                  className="bg-[#f8d6b6] hover:bg-[#facba0] rounded-2xl px-4 py-2 text-[#350203]"
+                >
+                  Join Now
+                </Link>
+                <Link href="/signin" className="text-[#350203]">
+                  Log In
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Hamburger Menu Toggle */}

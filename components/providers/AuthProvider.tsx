@@ -1,7 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { z } from "zod";
 
 // Schema for validation using Zod
@@ -35,6 +41,9 @@ interface AuthContextType {
   handleSubmit: (e: React.FormEvent) => Promise<void>;
   handleSignUp: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isAuthenticated: boolean;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  handleLogout: () => Promise<void>;
 }
 
 // Create AuthContext
@@ -50,6 +59,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [serverError, setServerError] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState<Partial<SignUpFormData>>({});
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch("/api/check");
+        const data = await response.json();
+        setIsAuthenticated(data.authenticated);
+      } catch (error) {
+        console.error("Failed to check authentication", error);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   // Helper function to check if password is similar to the email
   const isPasswordSimilarToEmail = (password: string, email: string) =>
@@ -86,6 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       console.log("Logged in successfully");
+      setIsAuthenticated(true);
       await router.push("/");
     } catch (error) {
       console.error("Login failed:", error);
@@ -153,6 +178,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // token
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/logout/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to log out");
+      }
+
+      console.log("Logged out successfully");
+      setIsAuthenticated(false);
+      await router.push("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      setServerError("Logout failed. Please try again.");
+    }
+  };
 
   return (
     <AuthContext.Provider
@@ -164,6 +212,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         handleSubmit,
         handleChange,
         handleSignUp,
+        handleLogout,
+        isAuthenticated,
+        setIsAuthenticated,
       }}
     >
       {children}

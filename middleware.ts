@@ -1,15 +1,12 @@
-// middleware.ts or _middleware.ts in the root or /pages directory (Next.js)
-
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Middleware to protect routes
 export function middleware(req: NextRequest) {
   // Check if the user has a valid access token in the cookies
-  const token = req.cookies.get("access_token");
-
+  const cookie = req.cookies.get("jwt-access-token");
   // If no token is found, redirect to the login page
-  if (!token) {
+  if (!cookie) {
     return NextResponse.redirect(new URL("/signin", req.url));
   }
 
