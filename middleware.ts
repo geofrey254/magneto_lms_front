@@ -1,12 +1,16 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 // Middleware to protect routes
-export function middleware(req: NextRequest) {
+const SECRET = process.env.NEXTAUTH_SECRET;
+
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req, secret: SECRET });
   // Check if the user has a valid access token in the cookies
   const cookie = req.cookies.get("jwt-access-token");
   // If no token is found, redirect to the login page
-  if (!cookie) {
+  if (!cookie && !token) {
     return NextResponse.redirect(new URL("/signin", req.url));
   }
 
