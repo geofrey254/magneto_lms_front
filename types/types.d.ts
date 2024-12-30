@@ -31,3 +31,10 @@ export interface Chapter {
     slug: string;
   };
 }
+
+export interface Subscription {
+  id: number;
+  name: string;
+  amount: number;
+  description: string;
+}

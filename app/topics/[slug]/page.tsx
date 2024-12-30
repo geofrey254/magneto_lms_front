@@ -44,7 +44,19 @@ async function TopicPage({ params }: Chapter) {
   }
 
   return (
-    <section className="mx-auto bg-[#fcf4ec] w-full max-w-screen-xl flex flex-col justify-center items-center py-16 overflow-hidden">
+    <section className="relative isolate mx-auto bg-[#fcf4ec] w-full max-w-screen-xl flex flex-col justify-center items-center py-16 overflow-hidden">
+      <div
+        className="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden px-36 blur-3xl"
+        aria-hidden="true"
+      >
+        <div
+          className="mx-auto aspect-[1155/678] w-full h-screen bg-gradient-to-tr from-[#ff80b5] to-[#350203] opacity-60"
+          style={{
+            clipPath:
+              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+          }}
+        ></div>
+      </div>
       <div className="bg-[#350203] w-full max-w-screen-xl py-8 px-4 sm:px-6 md:py-12 md:px-20 grid grid-cols-1 md:grid-cols-6 justify-between items-center">
         <div className="text-content col-span-5">
           <nav className="w-full text-sm mb-4 text-white rounded-xl font-light">
@@ -71,6 +83,7 @@ async function TopicPage({ params }: Chapter) {
           />
         </div>
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-12 py-4 px-4 sm:px-6 md:py-24 md:px-8">
         <div className="bg-white md:col-span-8 rounded-xl border-2 border-[#350203] p-6 overflow-hidden">
           {/* Lesson Overview */}
