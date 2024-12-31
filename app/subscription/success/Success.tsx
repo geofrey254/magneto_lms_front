@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -7,21 +8,49 @@ import { FaCheck } from "react-icons/fa";
 function Success() {
   const searchParams = useSearchParams();
   const reference = searchParams.get("reference");
+
   useEffect(() => {
-    if (reference) {
-      fetch(
-        `${process.env.NEXT_PUBLIC_AUTH}/confirm_payment/?reference=${reference}`
-      )
-        .then((res) => res.json())
-        .then((data) => {
+    const verifyPayment = async () => {
+      try {
+        // Get the token from cookies or fetch it securely
+        const response = await fetch("/api/check", {
+          method: "GET",
+        });
+        const { session } = await response.json();
+
+        const token = session?.access_token;
+        console.log(token);
+        if (!token) {
+          throw new Error("Token not found");
+        }
+
+        if (reference) {
+          const paymentResponse = await fetch(
+            `${process.env.NEXT_PUBLIC_AUTH}/confirm_payment/?reference=${reference}`,
+            {
+              method: "POST",
+              headers: { Authorization: `Bearer ${token}` },
+              // credentials: "include",
+            }
+          );
+
+          const data = await paymentResponse.json();
           if (data.status === true) {
             // Update user's subscription status in the app
+            console.log("Payment verified successfully");
           } else {
             alert("Payment verification failed.");
           }
-        });
-    }
+        }
+      } catch (error) {
+        console.error("Error verifying payment:", error);
+        alert("An error occurred. Please try again.");
+      }
+    };
+
+    verifyPayment();
   }, [reference]);
+
   return (
     <section className="w-full h-[90vh] top-0 left-0 flex items-center justify-center">
       <div className="p-4 text-center bg-white rounded-xl shadow sm:p-24">

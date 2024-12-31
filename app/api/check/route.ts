@@ -17,7 +17,10 @@ export async function GET(req: NextRequest) {
 
   if (token && access_token) {
     // Access token exists, the user is authenticated
-    return NextResponse.json({ authenticated: true, session: token });
+    return NextResponse.json({
+      authenticated: true,
+      session: token,
+    });
   } else if (refresh_token) {
     // Refresh token exists, but we need to verify it
     try {

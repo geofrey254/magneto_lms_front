@@ -1,6 +1,12 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
+declare module "next-auth" {
+  interface User {
+    accessToken?: string;
+  }
+}
+
 const authHandler = NextAuth({
   providers: [
     GoogleProvider({
@@ -15,51 +21,81 @@ const authHandler = NextAuth({
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
   callbacks: {
-    async session({ session, token }) {
-      session.accessToken = token.access_token as string;
-      session.idToken = token.idToken as string;
-      return session;
-    },
-    async jwt({ token, account }) {
+    async jwt({ token, account, user }) {
       if (account) {
         token.access_token = account.access_token;
         token.idqToken = account.idToken;
+        token.provider = account.provider;
+
+        if (user) {
+          token.accessToken = user.accessToken; // Store access token
+          token.email = user.email; // Store email
+          token.name = user.name;
+          token.image = user.image;
+        }
       }
 
       return token;
     },
+
     async signIn({ user, account }) {
       const isAllowedToSignIn = true;
-      if (isAllowedToSignIn) {
-        if (account?.provider) {
-          try {
-            const res = await fetch(
-              `${process.env.NEXT_PUBLIC_AUTH}/magneto/save_user/`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ user }),
-              }
-            );
 
-            if (!res.ok) {
-              const errorText = await res.text(); // Handle non-JSON responses
-              console.error("Failed to save user:", errorText);
-              return false;
+      if (!isAllowedToSignIn) {
+        console.warn("Sign-in not allowed for this user");
+        return "/signin"; // Redirect or indicate disallowed sign-in
+      }
+
+      if (account?.provider) {
+        const { access_token: accessToken, id_token: idToken } = account;
+
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_AUTH}/magneto/google/login/`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                access_token: accessToken,
+                id_token: idToken,
+              }),
             }
-          } catch (error) {
-            console.error("Error during user save:", error);
+          );
+
+          if (!response.ok) {
+            console.error(
+              "Failed to sign in:",
+              response.status,
+              response.statusText
+            );
             return false;
           }
+
+          const data = await response.json();
+          console.log("Backend response data:", data);
+
+          if (data?.access) {
+            // Attach the access token to the user object for further use
+            user.accessToken = data.access;
+            return true;
+          }
+
+          console.error("Access token missing in response");
+          return false;
+        } catch (error) {
+          console.error("Error during sign-in process:", error);
+          return false;
         }
-        return true;
-      } else {
-        console.warn("Sign-in not allowed for this user");
-        return "/signin";
       }
+
+      console.warn("Account provider is missing");
+      return false;
     },
   },
 });

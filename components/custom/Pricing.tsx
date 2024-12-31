@@ -1,15 +1,22 @@
 "use client";
+
 import { Subscription } from "@/types/types";
 import { useEffect, useState } from "react";
 
 function Pricing() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  interface User {
+    email: string;
+    name: string;
+  }
+
+  const [user, setUser] = useState<User | null>(null); // Adjust the type as per your user structure.
 
   useEffect(() => {
     const fetchPlans = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/subscription_plan`,
+          `${process.env.NEXT_PUBLIC_API_URL}/subscription_plan/`,
           {
             cache: "force-cache",
             next: { revalidate: 1 },
@@ -17,29 +24,72 @@ function Pricing() {
         );
 
         if (!res.ok) {
-          throw new Error("Failed to fetch subjects");
+          throw new Error("Failed to fetch subscriptions");
         }
+
         const data = await res.json();
-        console.log(data);
         setSubscriptions(data);
       } catch (error) {
         console.error("Error fetching subscriptions:", error);
-        return [];
       }
     };
+
+    const fetchUser = async () => {
+      try {
+        // Get the token from the backend API `/api/check`.
+        const tokenResponse = await fetch("/api/check", {
+          method: "GET",
+        });
+
+        const { session } = await tokenResponse.json();
+        console.log("Session data:", session);
+
+        const token = session?.access_token;
+        console.log("Access Token:", token);
+
+        if (!token) {
+          console.error("No access token found.");
+          return;
+        }
+
+        // Use the token to fetch the user details.
+        const userResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_AUTH}/api/auth/user`,
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        if (!userResponse.ok) {
+          throw new Error("Failed to fetch user details.");
+        }
+
+        const userData = await userResponse.json();
+        setUser(userData);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
     fetchPlans();
+    fetchUser();
   }, []);
 
   const handleSubscription = async (subscription: Subscription) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_AUTH}/submit/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: subscription.amount,
-          email: "devongeoffreymaina@gmail.com",
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_AUTH}/submit/${subscription.id}/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: subscription.amount,
+            email: user?.email, // Use the fetched user's email
+          }),
+        }
+      );
+
       const data = await res.json();
       if (data.status) {
         window.location.href = data.data.authorization_url;
@@ -80,7 +130,6 @@ function Pricing() {
         tailored to your needs.
       </p>
       <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 md:gap-x-8 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3">
-        {/* Daily Plan */}
         {subscriptions.map((sub) => (
           <div
             className="rounded-3xl rounded-t-3xl bg-white/60 ring-1 ring-gray-900/10 sm:mx-8 sm:p-10 lg:mx-0"
