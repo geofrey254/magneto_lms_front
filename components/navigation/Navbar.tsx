@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { MdOutlineMenuBook } from "react-icons/md";
 import { BiSolidFoodMenu } from "react-icons/bi";
 import { FaCertificate, FaMoneyCheck, FaSchool } from "react-icons/fa6";
@@ -7,19 +7,17 @@ import { TbBooks, TbListTree } from "react-icons/tb";
 import Link from "next/link";
 import { LiaSchoolSolid } from "react-icons/lia";
 import { GiTalk } from "react-icons/gi";
-import { useAuth } from "../providers/AuthProvider";
+import { useSession } from "next-auth/react";
+import SignOut from "../buttons/SignOut";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(true);
-  const { isAuthenticated, handleLogout } = useAuth();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: session, status } = useSession();
 
   const handleNav = () => {
     setMenuOpen(!menuOpen);
   };
-
-  useEffect(() => {
-    console.log("isAuthenticated", isAuthenticated);
-  }, [isAuthenticated]);
 
   return (
     <nav className="fixed bg-[#fbf5f3] z-50 h-[4vh] w-full flex justify-center items-center py-8 px-4 md:px-12 border-b border-[#350203]">
@@ -66,7 +64,7 @@ function Navbar() {
           }
         >
           <div className="flex flex-col gap-6 text-[#f8d6b6]">
-            {isAuthenticated ? (
+            {status == "authenticated" ? (
               <ul className="flex mt-6 px-4 justify-between">
                 <li>
                   <Link
@@ -78,13 +76,7 @@ function Navbar() {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/"
-                    onClick={handleLogout}
-                    className="bg-[#f8d6b6] hover:bg-[#facba0] rounded-2xl px-4 py-2 text-[#350203]"
-                  >
-                    Logout
-                  </Link>
+                  <SignOut />
                 </li>
               </ul>
             ) : (
@@ -168,7 +160,7 @@ function Navbar() {
         {/* Right side of the Navbar */}
         <div className="flex">
           <div className="hidden md:flex gap-6 justify-center items-center font-semibold text-sm">
-            {isAuthenticated ? (
+            {status == "authenticated" ? (
               <>
                 <Link
                   href="/dashboard"
@@ -176,13 +168,7 @@ function Navbar() {
                 >
                   Dashboard
                 </Link>
-                <Link
-                  href="/"
-                  onClick={handleLogout}
-                  className="bg-[#f8d6b6] hover:bg-[#facba0] rounded-2xl px-4 py-2 text-[#350203]"
-                >
-                  Logout
-                </Link>
+                <SignOut />
               </>
             ) : (
               <>

@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { z } from "zod";
+import { useSession } from "next-auth/react";
 
 // Schema for validation using Zod
 const SignUpSchema = z
@@ -44,6 +45,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   handleLogout: () => Promise<void>;
+  authenticateWithBackend: () => Promise<void>;
 }
 
 // Create AuthContext
@@ -60,6 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [formErrors, setFormErrors] = useState<Partial<SignUpFormData>>({});
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -85,6 +88,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ...prevData,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  //google signin
+  const authenticateWithBackend = async () => {
+    if (!session) return;
+
+    const idToken = session.idToken;
+
+    const response = await fetch("http://localhost:8000/api/token/verify/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id_token: idToken }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Backend authentication success:", data);
+    } else {
+      const errorData = await response.json();
+      console.error("Backend authentication failed:", errorData);
+    }
   };
 
   // Handle login submission
@@ -215,6 +241,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         handleLogout,
         isAuthenticated,
         setIsAuthenticated,
+        authenticateWithBackend,
       }}
     >
       {children}

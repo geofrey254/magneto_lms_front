@@ -32,14 +32,17 @@ const authHandler = NextAuth({
         token.provider = account.provider;
 
         if (user) {
-          token.accessToken = user.accessToken; // Store access token
-          token.email = user.email; // Store email
+          token.email = user.email;
           token.name = user.name;
           token.image = user.image;
         }
       }
 
       return token;
+    },
+    async session({ session, token }) {
+      session.accessToken = token.accessToken as string; // Expose the token to the client
+      return session;
     },
 
     async signIn({ user, account }) {

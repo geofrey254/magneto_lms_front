@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { FaCheck } from "react-icons/fa";
+import { getCsrfToken } from "next-auth/react";
 
 function Success() {
   const searchParams = useSearchParams();
@@ -12,25 +13,18 @@ function Success() {
   useEffect(() => {
     const verifyPayment = async () => {
       try {
-        // Get the token from cookies or fetch it securely
-        const response = await fetch("/api/check", {
-          method: "GET",
-        });
-        const { session } = await response.json();
-
-        const token = session?.access_token;
-        console.log(token);
-        if (!token) {
-          throw new Error("Token not found");
-        }
-
         if (reference) {
+          const csrfToken = await getCsrfToken();
+          console.log("CSRF:", csrfToken);
+
           const paymentResponse = await fetch(
             `${process.env.NEXT_PUBLIC_AUTH}/confirm_payment/?reference=${reference}`,
             {
               method: "POST",
-              headers: { Authorization: `Bearer ${token}` },
-              // credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
             }
           );
 

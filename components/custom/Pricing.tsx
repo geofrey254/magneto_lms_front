@@ -1,16 +1,14 @@
 "use client";
 
 import { Subscription } from "@/types/types";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 function Pricing() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  interface User {
-    email: string;
-    name: string;
-  }
 
-  const [user, setUser] = useState<User | null>(null); // Adjust the type as per your user structure.
+  const { data: session } = useSession();
+  console.log(session);
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -34,70 +32,56 @@ function Pricing() {
       }
     };
 
-    const fetchUser = async () => {
-      try {
-        // Get the token from the backend API `/api/check`.
-        const tokenResponse = await fetch("/api/check", {
-          method: "GET",
-        });
-
-        const { session } = await tokenResponse.json();
-        console.log("Session data:", session);
-
-        const token = session?.access_token;
-        console.log("Access Token:", token);
-
-        if (!token) {
-          console.error("No access token found.");
-          return;
-        }
-
-        // Use the token to fetch the user details.
-        const userResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_AUTH}/api/auth/user`,
-          {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
-        if (!userResponse.ok) {
-          throw new Error("Failed to fetch user details.");
-        }
-
-        const userData = await userResponse.json();
-        setUser(userData);
-      } catch (error) {
-        console.error("Error fetching user details:", error);
-      }
-    };
-
     fetchPlans();
-    fetchUser();
   }, []);
 
   const handleSubscription = async (subscription: Subscription) => {
     try {
+      // Step 1: Fetch the token from /api/check
+      const response = await fetch("/api/check", {
+        method: "GET",
+      });
+
+      const { csrf } = await response.json();
+
+      const csrfToken = csrf?.value;
+      console.log("CSRF:", csrfToken);
+
+      console.log("User:", session?.user.email);
+      // Step 2: Use the token in the request to the backend
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_AUTH}/submit/${subscription.id}/`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session?.accessToken}`, // Include the token here
+            "X-CSRFToken": csrfToken,
+
+            // Include the CSRF token here
+          },
+          credentials: "include",
           body: JSON.stringify({
             amount: subscription.amount,
-            email: user?.email, // Use the fetched user's email
+            email: session?.user.email, // Use the fetched user's email
           }),
         }
       );
 
+      console.log("Token sent:", session?.accessToken); // Check if the token is correctly passed
+
       const data = await res.json();
+      console.log("Payment initialization response:", data);
+
       if (data.status) {
         window.location.href = data.data.authorization_url;
       } else {
         console.error("Payment initialization failed:", data.message);
+        alert("Payment initialization failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error initializing payment:", error);
+      console.error("Error handling subscription:", error);
+      alert("An error occurred. Please try again.");
     }
   };
 
