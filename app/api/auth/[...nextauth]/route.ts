@@ -4,6 +4,8 @@ import GoogleProvider from "next-auth/providers/google";
 declare module "next-auth" {
   interface User {
     accessToken?: string;
+    refreshToken?: string;
+    accessTokenExpires?: number;
   }
 }
 
@@ -25,26 +27,6 @@ const authHandler = NextAuth({
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, account, user }) {
-      if (account) {
-        token.access_token = account.access_token;
-        token.idqToken = account.idToken;
-        token.provider = account.provider;
-
-        if (user) {
-          token.email = user.email;
-          token.name = user.name;
-          token.image = user.image;
-        }
-      }
-
-      return token;
-    },
-    async session({ session, token }) {
-      session.accessToken = token.accessToken as string; // Expose the token to the client
-      return session;
-    },
-
     async signIn({ user, account }) {
       const isAllowedToSignIn = true;
 
@@ -83,9 +65,12 @@ const authHandler = NextAuth({
           const data = await response.json();
           console.log("Backend response data:", data);
 
-          if (data?.access) {
+          if (data?.access && data?.refresh) {
             // Attach the access token to the user object for further use
             user.accessToken = data.access;
+            user.refreshToken = data.refresh;
+            user.accessTokenExpires = Date.now() + 5 * 60 * 1000;
+
             return true;
           }
 
@@ -100,7 +85,84 @@ const authHandler = NextAuth({
       console.warn("Account provider is missing");
       return false;
     },
+
+    async jwt({ token, account, user }) {
+      if (account) {
+        // Set Google tokens from the account object (if available)
+        token.accessToken = account.access_token;
+        token.refreshToken = account.refresh_token || user?.refreshToken;
+        token.idqToken = account.idToken;
+        token.provider = account.provider;
+      }
+
+      if (user && user.accessToken) {
+        token.accessToken = user.accessToken;
+        token.refreshToken = user.refreshToken;
+        token.email = user.email;
+        token.name = user.name;
+        token.image = user.image;
+      }
+
+      if (Date.now() < (token.accessTokenExpires as number)) {
+        return token;
+      }
+
+      // Access token has expired, refresh it
+      return await refreshAccessToken({
+        accessToken: token.accessToken as string,
+        refreshToken: token.refreshToken as string,
+        accessTokenExpires: token.accessTokenExpires as number,
+        ...token,
+      });
+    },
+
+    async session({ session, token }) {
+      session.accessToken = token.accessToken as string; // Expose the token to the client
+      session.refreshToken = token.refreshToken as string;
+
+      return session;
+    },
   },
 });
+
+interface Token {
+  accessToken: string;
+  refreshToken: string;
+  accessTokenExpires: number;
+  [key: string]: unknown;
+}
+
+async function refreshAccessToken(token: Token) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/token/refresh/`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh: token.refreshToken }),
+      }
+    );
+
+    const refreshedTokens = await response.json();
+
+    if (!response.ok) {
+      throw refreshedTokens;
+    }
+
+    return {
+      ...token,
+      accessToken: refreshedTokens.access,
+      accessTokenExpires: Date.now() + 30 * 60 * 1000, // Set 30 minutes from now
+      refreshToken: refreshedTokens.refresh || token.refreshToken, // Reuse old refresh token if not provided
+    };
+  } catch (error) {
+    console.error("Failed to refresh access token:", error);
+
+    return {
+      ...token,
+      error: "RefreshAccessTokenError",
+    };
+  }
+}
 
 export { authHandler as GET, authHandler as POST };

@@ -37,4 +37,9 @@ export interface Subscription {
   name: string;
   amount: number;
   description: string;
+  user: number;
+  verified: boolean;
+  plan: number;
+  start_date: string;
+  end_date: string;
 }

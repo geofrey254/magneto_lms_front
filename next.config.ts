@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       "images.unsplash.com",
       "images.pexels.com",
       "storage.googleapis.com",
+      "lh3.googleusercontent.com",
     ],
   },
 };

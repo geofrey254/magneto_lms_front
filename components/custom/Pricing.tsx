@@ -8,7 +8,7 @@ function Pricing() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
 
   const { data: session } = useSession();
-  console.log(session);
+  console.log("Session Token:", session?.accessToken);
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -42,10 +42,8 @@ function Pricing() {
         method: "GET",
       });
 
-      const { csrf } = await response.json();
-
-      const csrfToken = csrf?.value;
-      console.log("CSRF:", csrfToken);
+      const token = await response.json();
+      const csrfToken = token.csrfToken;
 
       console.log("User:", session?.user.email);
       // Step 2: Use the token in the request to the backend

@@ -5,12 +5,17 @@ import NextAuth from "next-auth";
 declare module "next-auth" {
   interface Session {
     accessToken?: string; // Extend session with accessToken
-    idToken?: string; // Extend session
+    idToken?: string;
+    refreshToken: string;
+
+    // Extend session
     user: {
       id: string;
       email: string;
       name: string;
       accessToken: string;
+      refreshToken: string;
+      image: string;
     };
     name?: string;
     email?: string;

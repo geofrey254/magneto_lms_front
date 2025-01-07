@@ -1,16 +1,36 @@
 "use client";
 import React, { useState } from "react";
-import { MdOutlineMenuBook } from "react-icons/md";
+import { MdOutlineMenuBook, MdOutlineSupportAgent } from "react-icons/md";
 import { BiSolidFoodMenu } from "react-icons/bi";
 import { FaCertificate, FaMoneyCheck, FaSchool } from "react-icons/fa6";
 import { TbBooks, TbListTree } from "react-icons/tb";
 import Link from "next/link";
+import Image from "next/image";
 import { LiaSchoolSolid } from "react-icons/lia";
 import { GiTalk } from "react-icons/gi";
 import { useSession } from "next-auth/react";
 import SignOut from "../buttons/SignOut";
+import { useRouter } from "next/navigation";
+
+import { PiStudentFill } from "react-icons/pi";
+import { MdPayment } from "react-icons/md";
+
+// imports
+
+// shadcn
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 function Navbar() {
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(true);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: session, status } = useSession();
@@ -162,13 +182,62 @@ function Navbar() {
           <div className="hidden md:flex gap-6 justify-center items-center font-semibold text-sm">
             {status == "authenticated" ? (
               <>
-                <Link
-                  href="/dashboard"
-                  className="text-[#350203] border-2 border-[#350203] px-8 py-2 rounded-2xl"
-                >
-                  Dashboard
-                </Link>
-                <SignOut />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    {session?.user.image ? (
+                      <button>
+                        <Image
+                          src={session.user.image}
+                          alt={`${session.user.name}'s profile`}
+                          width={35}
+                          height={35}
+                          className="rounded-full border-2 border-[#350203]"
+                        />
+                      </button>
+                    ) : (
+                      <button className="border-2 border-[#350203] p-2 rounded-full">
+                        <PiStudentFill size={20} className=" text-[#350203]" />
+                      </button>
+                    )}
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 rounded-2xl bg-blur">
+                    <DropdownMenuLabel className="">
+                      {session?.user.name}
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator className="bg-[#350203]" />
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem className="cursor-pointer">
+                        Magneto AI
+                        <DropdownMenuShortcut>
+                          <FaCertificate size={15} className="cert" />
+                        </DropdownMenuShortcut>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem
+                        onClick={() => {
+                          router.push("/billing");
+                        }}
+                        className="cursor-pointer"
+                      >
+                        Subscription
+                        <DropdownMenuShortcut>
+                          <MdPayment size={16} />
+                        </DropdownMenuShortcut>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem className="cursor-pointer">
+                        Support
+                        <DropdownMenuShortcut>
+                          <MdOutlineSupportAgent size={15} />
+                        </DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator className="bg-[#350203]" />
+                    <DropdownMenuItem>
+                      <SignOut />
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             ) : (
               <>

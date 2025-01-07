@@ -1,11 +1,15 @@
 import { signOut } from "next-auth/react";
+import { RiLogoutCircleRLine } from "react-icons/ri";
 
 function SignOut() {
   return (
     <button
-      className="bg-white flex justify-center items-center gap-4 border border-zinc-300 hover:bg-[#3502033b] hover:text-[#350203] px-4 md:px-8 py-2 rounded-2xl w-full text-zinc-700"
+      className="text-[#350203] flex gap-3 justify-center items-center"
       onClick={() => signOut()}
     >
+      <span>
+        <RiLogoutCircleRLine size={20} />
+      </span>
       Sign Out
     </button>
   );

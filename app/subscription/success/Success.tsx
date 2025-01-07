@@ -2,34 +2,39 @@
 
 import React, { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { FaCheck } from "react-icons/fa";
-import { getCsrfToken } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 function Success() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const reference = searchParams.get("reference");
 
   useEffect(() => {
     const verifyPayment = async () => {
       try {
-        if (reference) {
-          const csrfToken = await getCsrfToken();
-          console.log("CSRF:", csrfToken);
+        const response = await fetch("/api/check", {
+          method: "GET",
+        });
 
+        const token = await response.json();
+        const csrfToken = token.csrfToken;
+
+        if (reference) {
           const paymentResponse = await fetch(
             `${process.env.NEXT_PUBLIC_AUTH}/confirm_payment/?reference=${reference}`,
             {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken || "",
               },
               credentials: "include",
             }
           );
-
           const data = await paymentResponse.json();
-          if (data.status === true) {
+          console.log(data);
+          if (data.status === "success") {
             // Update user's subscription status in the app
             console.log("Payment verified successfully");
           } else {
@@ -40,10 +45,14 @@ function Success() {
         console.error("Error verifying payment:", error);
         alert("An error occurred. Please try again.");
       }
+
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
     };
 
     verifyPayment();
-  }, [reference]);
+  }, [reference, router]);
 
   return (
     <section className="w-full h-[90vh] top-0 left-0 flex items-center justify-center">
@@ -54,12 +63,6 @@ function Success() {
         <p className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
           Payment Successful
         </p>
-        <Link
-          href="/topics"
-          className="bg-[#350203] rounded-2xl text-white px-6 py-2.5 font-semibold"
-        >
-          Continue
-        </Link>
       </div>
     </section>
   );
