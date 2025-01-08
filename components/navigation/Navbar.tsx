@@ -206,7 +206,12 @@ function Navbar() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator className="bg-[#350203]" />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem
+                        onClick={() => {
+                          router.push("/magneto/tutor");
+                        }}
+                        className="cursor-pointer"
+                      >
                         Magneto AI
                         <DropdownMenuShortcut>
                           <FaCertificate size={15} className="cert" />
