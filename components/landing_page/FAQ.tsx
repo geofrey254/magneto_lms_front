@@ -18,13 +18,13 @@ function FAQ() {
     {
       question: "How do I access my class content?",
       answer:
-        "Once you log in, navigate to the 'Classes' section, choose your class, and select the chapter you want to study.",
+        "Once you log in, navigate to the 'Topics' section, choose your class, and select the chapter you want to study.",
     },
-    {
-      question: "How do I submit exams?",
-      answer:
-        "You can download the exam in PDF format, complete it, and upload your scanned answers for grading.",
-    },
+    // {
+    //   question: "How do I submit exams?",
+    //   answer:
+    //     "You can download the exam in PDF format, complete it, and upload your scanned answers for grading.",
+    // },
     {
       question: "How does pricing work?",
       answer:
@@ -33,7 +33,7 @@ function FAQ() {
     {
       question: "What is the payment method?",
       answer:
-        "We accept payments through M-Pesa. After selecting your courses, you will be guided through the payment process.",
+        "We accept payments through M-Pesa. Before accessing the content, you will be required to subscribe to the platform either daily, monthly or yearly depending on your needs.",
     },
   ];
 

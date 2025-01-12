@@ -51,7 +51,7 @@ const SubjectChapters = async ({ params }: Subject) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 pt-8 px-8 md:px-0">
+          <div className="grid md:grid-cols-3 gap-4 md:gap-0 pt-8 px-8 md:px-0">
             {sortedChapters.map((chap) => (
               <div
                 key={chap.id}

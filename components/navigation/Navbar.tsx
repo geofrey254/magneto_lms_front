@@ -154,7 +154,7 @@ function Navbar() {
               <div className="bg-[#f8d6b6] rounded-full p-2">
                 <FaMoneyCheck size={15} className="text-[#350203]" />
               </div>
-              <Link href="/subjects" onClick={handleNav}>
+              <Link href="/subscription" onClick={handleNav}>
                 Pricing
               </Link>
             </li>

@@ -71,7 +71,7 @@ const Dialog: FC<DialogProps> = ({ onClose }) => {
 
   return (
     <section className="font-Montserrat tracking-wide fixed inset-0 mt-16 flex items-center justify-center bg-black bg-opacity-50 z-10">
-      <div className="chat-bg rounded-lg shadow-xl w-full max-w-full h-[80vh] md:h-[90vh] flex flex-col">
+      <div className="chat-bg rounded-lg shadow-xl w-full max-w-full h-[85vh] md:h-[90vh] flex flex-col">
         <div className="flex justify-between items-center p-4 bg-[#350203]">
           <h2 className="text-lg font-light text-white">
             Magneto Learning Assistant

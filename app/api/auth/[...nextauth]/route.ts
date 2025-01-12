@@ -26,6 +26,10 @@ const authHandler = NextAuth({
   session: {
     strategy: "jwt",
   },
+  pages: {
+    signIn: "/signin",
+    signOut: "/signin",
+  },
   callbacks: {
     async signIn({ user, account }) {
       const isAllowedToSignIn = true;
@@ -101,6 +105,7 @@ const authHandler = NextAuth({
         token.email = user.email;
         token.name = user.name;
         token.image = user.image;
+        token.accessTokenExpires = user.accessTokenExpires;
       }
 
       if (Date.now() < (token.accessTokenExpires as number)) {
@@ -126,7 +131,6 @@ const authHandler = NextAuth({
 });
 
 interface Token {
-  accessToken: string;
   refreshToken: string;
   accessTokenExpires: number;
   [key: string]: unknown;
@@ -134,6 +138,10 @@ interface Token {
 
 async function refreshAccessToken(token: Token) {
   try {
+    if (!token.refreshToken) {
+      throw new Error("Refresh token is missing!");
+    }
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/token/refresh/`,
       {
@@ -152,10 +160,11 @@ async function refreshAccessToken(token: Token) {
     return {
       ...token,
       accessToken: refreshedTokens.access,
-      accessTokenExpires: Date.now() + 30 * 60 * 1000, // Set 30 minutes from now
+      accessTokenExpires: Date.now() + 5 * 60 * 1000, // Set 30 minutes from now
       refreshToken: refreshedTokens.refresh || token.refreshToken, // Reuse old refresh token if not provided
     };
   } catch (error) {
+    console.log("Refresh==", token);
     console.error("Failed to refresh access token:", error);
 
     return {

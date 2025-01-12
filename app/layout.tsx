@@ -9,7 +9,7 @@ import Footer from "@/components/navigation/Footer";
 import { AppWrapper } from "@/components/providers/Providers";
 import { Providers } from "@/components/providers/SessionProvider";
 // types
-import { Subject, Chapter } from "@/types/types";
+import { Subject, Chapter, Subscription } from "@/types/types";
 
 export const metadata: Metadata = {
   title: "Magneto - Unlock Learning, One Day at a Time",
@@ -60,6 +60,28 @@ async function fetchTopics() {
   }
 }
 
+async function fetchSubscriptions() {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/subscription_plan/`,
+      {
+        cache: "force-cache",
+        next: { revalidate: 1 },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch subscriptions");
+    }
+
+    const subscriptions: Subscription[] = await res.json();
+    return subscriptions;
+  } catch (error) {
+    console.error("Error fetching subscriptions:", error);
+    return [];
+  }
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -67,12 +89,17 @@ export default async function RootLayout({
 }>) {
   const subjects = await fetchSubjects();
   const chapters = await fetchTopics();
+  const subscriptions = await fetchSubscriptions();
   return (
     <html lang="en">
       <body className="font-Poppins font-medium">
         <Providers>
           <Navbar />
-          <AppWrapper subjects={subjects} chapters={chapters}>
+          <AppWrapper
+            subjects={subjects}
+            chapters={chapters}
+            subscriptions={subscriptions}
+          >
             {children}
           </AppWrapper>
         </Providers>

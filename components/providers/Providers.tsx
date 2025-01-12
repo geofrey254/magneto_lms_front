@@ -1,10 +1,11 @@
 "use client";
 import { createContext, useContext, useState } from "react";
-import { Subject, Chapter } from "@/types/types";
+import { Subject, Chapter, Subscription } from "@/types/types";
 
 interface AppContextProps {
   subjects: Subject[] | null;
   chapters: Chapter[] | null;
+  subscriptions: Subscription[] | null;
   filteredChapters: Chapter[];
   latestChapters: Chapter[];
   searchTerm: string;
@@ -16,10 +17,12 @@ const AppContext = createContext<AppContextProps | undefined>(undefined);
 export function AppWrapper({
   subjects,
   chapters,
+  subscriptions,
   children,
 }: Readonly<{
   subjects: Subject[] | null;
   chapters: Chapter[] | null;
+  subscriptions: Subscription[] | null;
   children: React.ReactNode;
 }>) {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -40,6 +43,7 @@ export function AppWrapper({
       value={{
         subjects,
         chapters,
+        subscriptions,
         filteredChapters,
         latestChapters,
         searchTerm,

@@ -1,90 +1,14 @@
 "use client";
 
-import { Subscription } from "@/types/types";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useAppContext } from "../providers/Providers";
 
 function Pricing() {
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const context = useAppContext();
+  const { subscriptions } = context;
 
-  const { data: session } = useSession();
-  console.log("Session Token:", session?.accessToken);
-
-  useEffect(() => {
-    const fetchPlans = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/subscription_plan/`,
-          {
-            cache: "force-cache",
-            next: { revalidate: 1 },
-          }
-        );
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch subscriptions");
-        }
-
-        const data = await res.json();
-        setSubscriptions(data);
-      } catch (error) {
-        console.error("Error fetching subscriptions:", error);
-      }
-    };
-
-    fetchPlans();
-  }, []);
-
-  const handleSubscription = async (subscription: Subscription) => {
-    try {
-      // Step 1: Fetch the token from /api/check
-      const response = await fetch("/api/check", {
-        method: "GET",
-      });
-
-      const token = await response.json();
-      const csrfToken = token.csrfToken;
-
-      console.log("User:", session?.user.email);
-      // Step 2: Use the token in the request to the backend
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_AUTH}/submit/${subscription.id}/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session?.accessToken}`, // Include the token here
-            "X-CSRFToken": csrfToken,
-
-            // Include the CSRF token here
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            amount: subscription.amount,
-            email: session?.user.email, // Use the fetched user's email
-          }),
-        }
-      );
-
-      console.log("Token sent:", session?.accessToken); // Check if the token is correctly passed
-
-      const data = await res.json();
-      console.log("Payment initialization response:", data);
-
-      if (data.status) {
-        window.location.href = data.data.authorization_url;
-      } else {
-        console.error("Payment initialization failed:", data.message);
-        alert("Payment initialization failed. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error handling subscription:", error);
-      alert("An error occurred. Please try again.");
-    }
-  };
-
-  if (subscriptions.length === 0) {
-    return <p>No subscription plans available at the moment.</p>;
+  if (!subscriptions || subscriptions.length === 0) {
+    return <p>No subjects available.</p>;
   }
 
   return (
@@ -103,7 +27,7 @@ function Pricing() {
       </div>
       <div className="mx-auto max-w-4xl text-center">
         <h2 className="text-base/7 font-semibold text-[#350203]">Pricing</h2>
-        <p className="mt-2 text-balance text-5xl font-semibold tracking-tight text-gray-900 sm:text-6xl">
+        <p className="mt-2 text-balance font-extrabold md:font-semibold tracking-tight text-gray-900 text-3xl md:text-6xl">
           Choose the right plan for your learning journey
         </p>
       </div>
@@ -111,10 +35,10 @@ function Pricing() {
         Unlock access to premium educational content with flexible plans
         tailored to your needs.
       </p>
-      <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 md:gap-x-8 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3">
+      <div className="mx-auto mt-8 md:mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 md:gap-x-8 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3">
         {subscriptions.map((sub) => (
           <div
-            className="rounded-3xl rounded-t-3xl bg-white/60 ring-1 ring-gray-900/10 sm:mx-8 sm:p-10 lg:mx-0"
+            className="rounded-3xl rounded-t-3xl bg-white/60 ring-1 ring-[#350203] sm:mx-8 p-8 md:p-10 lg:mx-0 md:h-[60vh]"
             key={sub.id}
           >
             <h3 className="text-base/7 font-semibold text-[#350203a9] capitalize">
@@ -124,18 +48,19 @@ function Pricing() {
               <span className="text-4xl font-semibold tracking-tight text-gray-900">
                 Kes{sub.amount}
               </span>
-              <span className="text-base text-gray-500">/day</span>
+              <span className="text-base text-gray-500"></span>
             </p>
             <p className="mt-6 text-base text-gray-600">{sub.description} </p>
-            <button
-              aria-describedby="tier-daily"
-              className="mt-8 block rounded-2xl px-3.5 py-2.5 text-center text-sm font-semibold text-[#350203] ring-1 ring-inset ring-indigo-200 hover:ring-[#350203] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#350203] sm:mt-10"
-              onClick={() => handleSubscription(sub)}
-            >
-              Get started today
-            </button>
           </div>
         ))}
+      </div>
+      <div className="flex justify-center items-center mt-12">
+        <Link
+          href="/subscription/initiate"
+          className="bg-[#350203] text-white p-4 rounded-2xl"
+        >
+          Initiate Payment
+        </Link>
       </div>
     </div>
   );

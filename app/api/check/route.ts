@@ -63,9 +63,10 @@ export async function middleware(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const cookieStore = await cookies();
   const csrfToken = cookieStore.get("csrftoken");
+  const session_id = cookieStore.get("sessionid");
 
   if (csrfToken) {
-    return NextResponse.json({ csrfToken: csrfToken.value });
+    return NextResponse.json({ csrfToken: csrfToken.value, session_id });
   }
 
   return NextResponse.json({ error: "CSRF token not found" }, { status: 404 });

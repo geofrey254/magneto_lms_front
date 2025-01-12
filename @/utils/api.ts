@@ -5,8 +5,16 @@
  * @param {string} input - The user's input or prompt to send to the backend.
  * @returns {Promise<{ magneto: { session_id: string; outputs: string } }>} - The response from the backend.
  */
+
 export async function sendPrompt(input: string): Promise<string> {
   try {
+    const res = await fetch("/api/check", {
+      method: "GET",
+    });
+
+    const token = await res.json();
+    const session_id = token.session_id;
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/magneto_agent/`,
       {
@@ -14,7 +22,7 @@ export async function sendPrompt(input: string): Promise<string> {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ message: input, session_id }),
       }
     );
 

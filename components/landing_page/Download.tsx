@@ -12,8 +12,8 @@ function Download() {
             Take Learning with You – Download the Magneto App
           </h4>
         </div>
-        <div className="mt-5 flex flex-col md:flex-row gap-3">
-          <Link href="#">
+        <div className="mt-5 flex  md:flex-row gap-3">
+          <Link href="/coming_soon">
             <Image
               src="/img/app.png"
               width={300}
@@ -22,13 +22,13 @@ function Download() {
               className="w-40 md:w-[200px] bg-[#f0e1d4ec] p-3 rounded-2xl"
             />
           </Link>
-          <Link href="#">
+          <Link href="/coming_soon">
             <Image
               src="/img/play.png"
               width={300}
               height={150}
               alt="App Store"
-              className="w-40 md:w-[195px] bg-[#f0e1d4ec] p-3 rounded-2xl"
+              className="w-36 md:w-[195px] bg-[#f0e1d4ec] p-3 rounded-2xl"
             />
           </Link>
         </div>

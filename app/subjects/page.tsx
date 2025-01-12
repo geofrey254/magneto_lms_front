@@ -4,7 +4,7 @@ import Subjects from "./subjects";
 export default async function Page() {
   return (
     <section className="w-full max-w-full px-4 pt-20 pb-6 md:p-16 md:pt-24 xl:px-24 2xl:p-24 ">
-      <div className="text-center mb-12">
+      <div className="text-center mt-8 md:mt-0 mb-2 md:mb-12">
         <h3 className="text-[#350203] text-3xl md:text-2xl font-bold">
           Choose Your Subject
         </h3>
