@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineMenuBook, MdOutlineSupportAgent } from "react-icons/md";
 import { BiSolidFoodMenu } from "react-icons/bi";
 import { FaCertificate, FaMoneyCheck, FaSchool } from "react-icons/fa6";
@@ -34,10 +34,17 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(true);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: session, status } = useSession();
+  console.log(session?.error);
 
   const handleNav = () => {
     setMenuOpen(!menuOpen);
   };
+
+  useEffect(() => {
+    if (!session) {
+      SignOut();
+    }
+  });
 
   return (
     <nav className="fixed bg-[#fbf5f3] z-50 h-[4vh] w-full flex justify-center items-center py-8 px-4 md:px-12 border-b border-[#350203]">

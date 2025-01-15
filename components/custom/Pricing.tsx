@@ -1,11 +1,86 @@
 "use client";
 
-import Link from "next/link";
 import { useAppContext } from "../providers/Providers";
+// shadcn
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useState } from "react";
+import { Subscription } from "@/types/types";
+import { useSession } from "next-auth/react";
 
 function Pricing() {
   const context = useAppContext();
   const { subscriptions } = context;
+  const { data: session } = useSession();
+
+  const [selectedPlan, setSelectedPlan] = useState<Subscription | null>(null);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+
+  const handlePlanSelect = (plan: Subscription) => {
+    if (session?.user) {
+      setSelectedPlan(plan);
+      setIsConfirmationOpen(true);
+    }
+  };
+
+  const handleSubscription = async (subscription: Subscription) => {
+    try {
+      // Step 1: Fetch the token from /api/check
+      const response = await fetch("/api/check", {
+        method: "GET",
+      });
+
+      const token = await response.json();
+      const csrfToken = token.csrfToken;
+
+      // Step 2: Use the token in the request to the backend
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_AUTH}/submit/${subscription.id}/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session?.accessToken}`, // Include the token here
+            "X-CSRFToken": csrfToken,
+
+            // Include the CSRF token here
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            amount: subscription.amount,
+            email: session?.user.email, // Use the fetched user's email
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.status) {
+        window.location.href = data.data.authorization_url;
+      } else {
+        console.error("Payment initialization failed:", data.message);
+        alert("Payment initialization failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error handling subscription:", error);
+      alert("An error occurred. Please try again.");
+    }
+  };
 
   if (!subscriptions || subscriptions.length === 0) {
     return <p>No subjects available.</p>;
@@ -35,32 +110,76 @@ function Pricing() {
         Unlock access to premium educational content with flexible plans
         tailored to your needs.
       </p>
-      <div className="mx-auto mt-8 md:mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 md:gap-x-8 sm:mt-20 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-3">
-        {subscriptions.map((sub) => (
-          <div
-            className="rounded-3xl rounded-t-3xl bg-white/60 ring-1 ring-[#350203] sm:mx-8 p-8 md:p-10 lg:mx-0 md:h-[60vh]"
-            key={sub.id}
-          >
-            <h3 className="text-base/7 font-semibold text-[#350203a9] capitalize">
-              {sub.name}
-            </h3>
-            <p className="mt-4 flex items-baseline gap-x-2">
-              <span className="text-4xl font-semibold tracking-tight text-gray-900">
-                Kes{sub.amount}
-              </span>
-              <span className="text-base text-gray-500"></span>
-            </p>
-            <p className="mt-6 text-base text-gray-600">{sub.description} </p>
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-center items-center mt-12">
-        <Link
-          href="/subscription/initiate"
-          className="bg-[#350203] text-white p-4 rounded-2xl"
-        >
-          Initiate Payment
-        </Link>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-center mb-8">
+          Choose Your Plan
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {subscriptions.map((plan) => (
+            <Card
+              key={plan.id}
+              className="rounded-3xl rounded-t-3xl bg-white/60 ring-1 ring-[#350203] sm:mx-8 p-4 md:flex md:flex-col lg:mx-0 md:h-[60vh]"
+            >
+              <CardHeader className="">
+                <CardTitle className="text-xl font-semibold text-[#350203a9] capitalize tracking-wide mb-2">
+                  {plan.name}
+                </CardTitle>
+                <CardDescription className="text-4xl font-bold">
+                  <span className="text-sm">Kes.</span>
+                  {plan.amount} /=
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <p className="mt-6 text-sm xl:text-base text-gray-600">
+                  {plan.description}
+                </p>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  className="rounded-2xl px-3.5 py-3 text-center text-sm font-semibold text-[#350203] hover:border hover:border-[#350203] mt-4"
+                  onClick={() => {
+                    if (!session?.user) {
+                      window.location.href = "/signin";
+                    } else {
+                      handlePlanSelect(plan);
+                    }
+                  }}
+                >
+                  {session?.user ? "Select Plan" : "Log in to Subscribe"}
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+
+        <Dialog open={isConfirmationOpen} onOpenChange={setIsConfirmationOpen}>
+          <DialogContent className="bg-white border-2 border-[#350203]">
+            <DialogHeader className="flex justify-center items-center">
+              <DialogTitle className="text-xl">
+                Confirm Your Selection
+              </DialogTitle>
+              <DialogDescription>
+                You have selected the {selectedPlan?.name} plan. The amount is
+                Kes.
+                {selectedPlan?.amount}.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="mt-4">
+              <Button
+                onClick={() => setIsConfirmationOpen(false)}
+                className="bg-red-400 rounded-xl text-white"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => handleSubscription(selectedPlan!)}
+                className="rounded-xl border border-[#350203]"
+              >
+                Proceed to Payment
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

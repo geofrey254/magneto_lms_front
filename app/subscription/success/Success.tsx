@@ -33,10 +33,9 @@ function Success() {
             }
           );
           const data = await paymentResponse.json();
-          console.log(data);
           if (data.status === "success") {
             // Update user's subscription status in the app
-            console.log("Payment verified successfully");
+            alert("Payment verified successfully");
           } else {
             alert("Payment verification failed.");
           }

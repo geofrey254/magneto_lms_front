@@ -6,7 +6,8 @@ declare module "next-auth" {
   interface Session {
     accessToken?: string; // Extend session with accessToken
     idToken?: string;
-    refreshToken: string;
+    refreshToken?: string;
+    error?: "RefreshAccessTokenError" | "InvalidTokenError" | string;
 
     // Extend session
     user: {
@@ -22,7 +23,8 @@ declare module "next-auth" {
   }
 
   interface JWT {
-    access_token?: string; // Extend JWT with access_token
+    access_token?: string;
+    error?: "RefreshAccessTokenError" | string;
   }
 }
 

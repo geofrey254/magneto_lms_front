@@ -62,7 +62,6 @@ function Billing() {
 
           if (res.ok) {
             const data = await res.json();
-            console.log(data);
             setSubscription(data.subscriptions[0]);
           } else {
             console.error("Failed to fetch subscription data");
