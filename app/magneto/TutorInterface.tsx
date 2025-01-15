@@ -9,8 +9,8 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 
 // sidebar
-import { AppSidebar } from "@/components/navigation/app-sidebar";
-import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+// import { AppSidebar } from "@/components/navigation/app-sidebar";
+import { SidebarInset } from "@/components/ui/sidebar";
 import { PiStudentFill } from "react-icons/pi";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -80,11 +80,10 @@ const TutorInterface: FC = () => {
   return (
     <section className="magneto_assistant fixed inset-0 mt-32 flex items-center justify-center z-10">
       <div className="bg-[#221d1a] w-full max-w-full flex">
-        <AppSidebar />
         <SidebarInset>
           {/* Header Section */}
           <header className="flex h-12 shrink-0 items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1 text-white hover:text-white/65" />
+            {/* <SidebarTrigger className="-ml-1 text-white hover:text-white/65" /> */}
             <div>
               <h2 className="text-lg font-light text-white">
                 Magneto Learning Assistant
@@ -92,10 +91,10 @@ const TutorInterface: FC = () => {
             </div>
           </header>
           {/* Main Chat Area */}
-          <ScrollArea className="h-[70vh] w-full rounded-md ">
+          <ScrollArea className="h-[70vh] w-full rounded-md mt-8 md:mt-0">
             <div className="flex flex-col space-y-4 p-3">
               {/* Chat Messages Container */}
-              <div className="flex-1 overflow-y-auto px-24 pt-8 space-y-8">
+              <div className="flex-1 md:px-24 md:pt-8 space-y-8">
                 {messages.map((msg, index) => (
                   <div
                     key={index}
@@ -105,17 +104,14 @@ const TutorInterface: FC = () => {
                   >
                     {/* Magneto Icon for Assistant */}
                     {msg.sender === "magneto" && (
-                      <FaCertificate
-                        size={40}
-                        className="bg-[#350203] rounded-full p-2 text-white"
-                      />
+                      <FaCertificate size={40} className="text-white" />
                     )}
                     {/* Message Bubble */}
                     <div
                       className={`max-w-2xl px-4 py-2 ${
                         msg.sender === "user"
                           ? "self-end bg-[#fff8f8] rounded-bl-2xl rounded-tr-2xl text-[#350203]"
-                          : "self-start rounded-2xl p-2 leading-loose text-white text-base font-normal"
+                          : "self-start leading-loose text-white text-base font-normal"
                       }`}
                     >
                       <Markdown
