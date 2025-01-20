@@ -17,6 +17,7 @@ declare module "next-auth" {
       accessToken: string;
       refreshToken: string;
       image: string;
+      isSubscribed?: boolean;
     };
     name?: string;
     email?: string;
@@ -25,6 +26,7 @@ declare module "next-auth" {
   interface JWT {
     access_token?: string;
     error?: "RefreshAccessTokenError" | string;
+    isSubscribed?: boolean;
   }
 }
 

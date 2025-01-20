@@ -4,8 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAppContext } from "@/components/providers/Providers";
 import { ChaptersProps } from "@/types/types";
+import { useSession } from "next-auth/react";
 
 function Subjects({ limit }: ChaptersProps) {
+  const { data: session } = useSession();
+  console.log("Are you paid:", session);
+
   const context = useAppContext();
   const { subjects } = context;
 

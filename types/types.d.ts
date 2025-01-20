@@ -43,3 +43,8 @@ export interface Subscription {
   start_date: string;
   end_date: string;
 }
+
+export interface Lesson {
+  description: string;
+  lesson_content: string;
+}

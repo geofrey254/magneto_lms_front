@@ -34,7 +34,6 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(true);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: session, status } = useSession();
-  console.log(session?.error);
 
   const handleNav = () => {
     setMenuOpen(!menuOpen);

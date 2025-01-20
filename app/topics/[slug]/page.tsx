@@ -1,48 +1,107 @@
-import React from "react";
-import Link from "next/link";
-import { Chapter } from "@/types/types";
-import { FaCertificate } from "react-icons/fa6";
+"use client";
 
-// latestchapters
+import React, { use } from "react";
+import Link from "next/link";
+import { Subscription, Lesson } from "@/types/types";
+import { FaCertificate } from "react-icons/fa6";
+import { useSession } from "next-auth/react";
 import Latest from "../sidebar/latest";
 import Share from "../sidebar/share";
 import AIAgentSidebar from "../sidebar/AIAgentSidebar";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import useSWR from "swr";
 
-// Fetch all chapter slugs for static paths generation
-export async function generateStaticParams() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chapters`, {
-    next: { revalidate: 1 },
-    cache: "force-cache",
-  });
-  const data = await res.json();
-
-  return data.map((lesson: Chapter) => ({
-    slug: lesson.slug, // Ensure your API returns a slug
-  }));
+interface TopicPageProps {
+  params: Promise<{ slug: string }>;
 }
 
-// Lesson Page Component
-async function TopicPage({ params }: Chapter) {
-  const { slug } = await params; // Get slug from URL params
-
-  // Fetch the chapter data for the given slug
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/content?slug=${slug}`,
-    {
-      next: { revalidate: 1 },
-    }
-  );
+const fetcher = async (url: string) => {
+  const res = await fetch(url, { method: "GET", credentials: "include" });
   const data = await res.json();
-  const lesson = data.length > 0 ? data[0] : null;
+  console.log("Fetched data:", data); // Log the fetched data
+  return data[0];
+};
 
-  // Handle case when lesson is not found
-  if (!lesson) {
-    return <div>Chapter not found</div>;
+const TopicPage: React.FC<TopicPageProps> = ({ params }) => {
+  const { data: session } = useSession(); // Session state
+  const { slug } = use(params); // Unwrap `params` Promise
+
+  // Fetch subscription details (Optional: Refactor this into SWR as well)
+  const [isSubscribed, setSubscribed] = React.useState<Subscription | null>(
+    null
+  );
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchSubscription = async () => {
+      const csrfTokenResponse = await fetch("/api/check", { method: "GET" });
+      const tokenData = await csrfTokenResponse.json();
+      const csrfToken = tokenData.csrfToken;
+
+      if (session?.user) {
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/subscription/`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${session.accessToken}`,
+                "X-CSRFToken": csrfToken || "",
+                "X-User-Email": session.user.email,
+              },
+              credentials: "include",
+            }
+          );
+
+          const data = await res.json();
+          if (res.ok) {
+            setSubscribed(data.subscriptions[0]);
+          } else {
+            setSubscribed(null);
+          }
+        } catch (error) {
+          console.error("Error fetching subscription:", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    fetchSubscription();
+  }, [session]);
+
+  // SWR to fetch lesson data
+  const {
+    data: lesson,
+    error,
+    isLoading,
+  } = useSWR<Lesson>(
+    isSubscribed?.verified && slug
+      ? `${process.env.NEXT_PUBLIC_API_URL}/content/?slug=${slug}`
+      : null, // Conditional fetching
+    fetcher
+  );
+
+  // Loading state
+  if (loading || isLoading) {
+    return <div>Loading...</div>;
   }
 
+  // Subscription validation
+  if (!isSubscribed?.verified) {
+    return <p>Please subscribe to access this content.</p>;
+  }
+
+  // Lesson not found
+  if (error || !lesson) {
+    return <div>Lesson not found.</div>;
+  }
+
+  // Render page
   return (
     <section className="relative isolate mx-auto bg-[#fcf4ec] w-full max-w-screen-xl flex flex-col justify-center items-center py-16 overflow-hidden">
       <div
@@ -60,9 +119,7 @@ async function TopicPage({ params }: Chapter) {
       <div className="bg-[#350203] w-full max-w-screen-xl py-8 px-4 sm:px-6 md:py-12 md:px-20 grid grid-cols-1 md:grid-cols-6 justify-between items-center">
         <div className="text-content col-span-5">
           <nav className="w-full text-sm mb-4 text-white rounded-xl font-light">
-            <Link href="/" className="">
-              Home
-            </Link>
+            <Link href="/">Home</Link>
             <span className="mx-2">/{"/"}</span>
             <Link href="/topics" className="font-light">
               Topics
@@ -97,64 +154,10 @@ async function TopicPage({ params }: Chapter) {
           </div>
           {/* Lesson Content */}
           <div className="text-[#350203] prose prose-img:w-full prose-p:text-[#350203] prose-headings:text-[#350203] prose-strong:text-[#350203]">
-            {/* <div dangerouslySetInnerHTML={{ __html: lesson.lesson_content }} /> */}
             <ReactMarkdown
               className="markdown-content flex flex-col gap-2"
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeRaw]}
-              components={{
-                h1: ({ ...props }) => (
-                  <h1 className="text-2xl font-bold mb-2" {...props} />
-                ),
-                h2: ({ ...props }) => (
-                  <h2 className="text-xl font-semibold mb-2" {...props} />
-                ),
-                h3: ({ ...props }) => (
-                  <h3 className="text-lg font-medium mb-1" {...props} />
-                ),
-                p: ({ ...props }) => (
-                  <p
-                    className="text-base md:text-sm leading-relaxed mb-2 tracking-wider"
-                    {...props}
-                  />
-                ),
-                ul: ({ ...props }) => (
-                  <ul
-                    className="list-disc list-inside mt-4 mb-2 ml-4"
-                    {...props}
-                  />
-                ),
-                ol: ({ ...props }) => (
-                  <ol
-                    className="list-decimal list-inside mb-2 ml-4"
-                    {...props}
-                  />
-                ),
-                li: ({ ...props }) => (
-                  <li className="mb-1 text-base md:text-sm " {...props} />
-                ),
-                blockquote: ({ ...props }) => (
-                  <blockquote
-                    className="border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-2"
-                    {...props}
-                  />
-                ),
-                code: ({ inline, ...props }) =>
-                  inline ? (
-                    <code
-                      className="bg-gray-100 text-red-600 px-1 py-0.5 rounded"
-                      {...props}
-                    />
-                  ) : (
-                    <pre className="bg-gray-800 text-white p-2 rounded mb-2 text-pretty text-sm md:text-base">
-                      <code {...props} />
-                    </pre>
-                  ),
-                strong: ({ ...props }) => (
-                  <strong className="font-bold" {...props} />
-                ),
-                em: ({ ...props }) => <em className="italic " {...props} />,
-              }}
             >
               {lesson.lesson_content}
             </ReactMarkdown>
@@ -174,6 +177,6 @@ async function TopicPage({ params }: Chapter) {
       </div>
     </section>
   );
-}
+};
 
 export default TopicPage;
