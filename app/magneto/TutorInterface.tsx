@@ -13,6 +13,8 @@ import { useSession } from "next-auth/react";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { PiStudentFill } from "react-icons/pi";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import SubscriptionPrompt from "@/components/custom/SubscriptionPrompt";
+import { useSubscription } from "@/hooks/useSubscription";
 
 interface Message {
   sender: "user" | "magneto";
@@ -25,6 +27,8 @@ const TutorInterface: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
+
+  const { isSubscribed } = useSubscription();
 
   const handleSend = async () => {
     if (input.trim() === "") return;
@@ -76,6 +80,15 @@ const TutorInterface: FC = () => {
       document.body.style.overflow = "";
     };
   }, []);
+
+  // Subscription validation
+  if (!isSubscribed?.verified) {
+    return (
+      <div className="w-full bg-[#f8d6b6] h-screen flex justify-center items-center">
+        <SubscriptionPrompt />
+      </div>
+    );
+  }
 
   return (
     <section className="magneto_assistant fixed inset-0 mt-32 flex items-center justify-center z-10">

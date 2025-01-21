@@ -1,16 +1,18 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { Subscription } from "@/types/types";
 import { FaCertificate, FaCircle } from "react-icons/fa6";
 import Link from "next/link";
+import { useSubscription } from "@/hooks/useSubscription";
+import DashboardLoading from "@/components/custom/DashboardLoad";
 
 // providers
 import { useAppContext } from "@/components/providers/Providers";
 import { IoIosArrowForward } from "react-icons/io";
 import { MdOutlineWavingHand } from "react-icons/md";
+import NoSubscriptionData from "@/components/custom/NoData";
 
 function Billing() {
   const context = useAppContext();
@@ -18,8 +20,7 @@ function Billing() {
 
   const { data: session } = useSession();
 
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { isSubscribed, loading } = useSubscription();
 
   const formatDate = (date: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -34,67 +35,21 @@ function Billing() {
     return new Date(date).toLocaleDateString("en-US", options);
   };
 
-  useEffect(() => {
-    const fetchSubscription = async () => {
-      // Step 1: Fetch the token from /api/check
-      const response = await fetch("/api/check", {
-        method: "GET",
-      });
-
-      const token = await response.json();
-      const csrfToken = token.csrfToken;
-
-      // Ensure the user is authenticated and has a session
-      if (session?.user) {
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/subscription/`,
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${session.accessToken}`,
-                "X-CSRFToken": csrfToken || "",
-                "X-User-Email": session.user.email,
-              },
-              credentials: "include",
-            }
-          );
-
-          if (res.ok) {
-            const data = await res.json();
-            console.log("TRYING:", data.subscriptions[0].verified);
-            setSubscription(data.subscriptions[0]);
-          } else {
-            console.error("Failed to fetch subscription data");
-            setSubscription(null);
-          }
-        } catch (error) {
-          console.error("Error fetching subscription:", error);
-          setSubscription(null);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    if (session?.user) {
-      fetchSubscription();
-    } else {
-      setLoading(false);
-    }
-  }, [session]);
-
   // Handle loading state and no subscription found
   if (loading) {
-    return <div>Loading...</div>;
+    return <DashboardLoading />;
   }
 
-  if (!subscription) {
-    return <div>No subscription data found.</div>;
+  if (!isSubscribed) {
+    return (
+      <div className="container mx-auto p-4">
+        <NoSubscriptionData />
+      </div>
+    );
   }
 
-  const formattedStartDate = formatDate(subscription.start_date);
-  const formattedEndDate = formatDate(subscription.end_date);
+  const formattedStartDate = formatDate(isSubscribed.start_date);
+  const formattedEndDate = formatDate(isSubscribed.end_date);
 
   const displayedChapters = subjects?.slice(0, 5);
   const sortedChapters = displayedChapters?.sort((a, b) => {
@@ -126,12 +81,12 @@ function Billing() {
               {/* Display a green dot if active, red if inactive */}
               <FaCircle
                 className={`mr-2 ${
-                  subscription.verified
+                  isSubscribed.verified
                     ? "text-green-500 animate-pulse"
                     : "text-red-500"
                 }`}
               />
-              {subscription.verified ? "Active" : "Inactive"}
+              {isSubscribed.verified ? "Active" : "Inactive"}
             </span>
           </div>
           {/* magento ai */}
@@ -239,7 +194,7 @@ function Billing() {
                 Current Plan
               </h3>
               <span className="ml-2 text-sm text-gray-500 capitalize">
-                {subscription.plan}
+                {isSubscribed.plan}
               </span>
             </div>
             <div className="flex items-center mb-4 justify-between">
@@ -262,12 +217,12 @@ function Billing() {
                 {/* Display a green dot if active, red if inactive */}
                 <FaCircle
                   className={`mr-2 ${
-                    subscription.verified
+                    isSubscribed.verified
                       ? "text-green-500 animate-pulse"
                       : "text-red-500"
                   }`}
                 />
-                {subscription.verified ? "Active" : "Inactive"}
+                {isSubscribed.verified ? "Active" : "Inactive"}
               </span>
             </div>
           </div>

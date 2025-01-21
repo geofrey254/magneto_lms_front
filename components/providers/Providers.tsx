@@ -9,6 +9,7 @@ interface AppContextProps {
   filteredChapters: Chapter[];
   latestChapters: Chapter[];
   searchTerm: string;
+  totalPages: number;
   setSearchTerm: (term: string) => void;
 }
 
@@ -24,8 +25,10 @@ export function AppWrapper({
   chapters: Chapter[] | null;
   subscriptions: Subscription[] | null;
   children: React.ReactNode;
+  totalPages: number;
 }>) {
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const totalPages = 0; // Initialize totalPages with a default value
   const filteredChapters: Chapter[] = (chapters ?? []).filter((chap) => {
     const term = searchTerm.toLowerCase();
     return (
@@ -47,6 +50,7 @@ export function AppWrapper({
         filteredChapters,
         latestChapters,
         searchTerm,
+        totalPages,
         setSearchTerm,
       }}
     >

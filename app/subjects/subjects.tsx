@@ -3,10 +3,9 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAppContext } from "@/components/providers/Providers";
-import { ChaptersProps } from "@/types/types";
 import { useSession } from "next-auth/react";
 
-function Subjects({ limit }: ChaptersProps) {
+function Subjects() {
   const { data: session } = useSession();
   console.log("Are you paid:", session);
 
@@ -17,7 +16,7 @@ function Subjects({ limit }: ChaptersProps) {
     return <p>No subjects available.</p>;
   }
 
-  const displayedChapters = limit ? subjects.slice(0, limit) : subjects;
+  const displayedChapters = subjects;
   const sortedChapters = displayedChapters.sort((a, b) => {
     const titleA = a.title?.toLowerCase() || "";
     const titleB = b.title?.toLowerCase() || "";
@@ -79,14 +78,6 @@ function Subjects({ limit }: ChaptersProps) {
           </div>
         ))}
       </div>
-      {limit && subjects.length > limit && (
-        <Link
-          href="/subjects"
-          className="py-3 px-5 sm:ms-4 font-medium mt-12 text-[#350203] border-2 border-[#350203] hover:bg-[#350203] hover:text-[#f8d6b6] p-2 text-sm rounded-2xl"
-        >
-          View More
-        </Link>
-      )}
     </section>
   );
 }

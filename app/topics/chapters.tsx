@@ -3,20 +3,16 @@
 import React from "react";
 import Link from "next/link";
 import { useAppContext } from "@/components/providers/Providers";
-import { useViewMoreContext } from "@/components/providers/ViewMore";
 
 function Chapters() {
   const context = useAppContext();
-  const views = useViewMoreContext();
   const { chapters, filteredChapters } = context;
-  const { limits } = views;
   if (!chapters || chapters.length === 0) {
     return <p>No subjects available.</p>;
   }
 
   // Determine the number of chapters to display based on the limit
-  const displayLimit = limits || filteredChapters.length;
-  const displayedChapters = filteredChapters.slice(0, displayLimit);
+  const displayedChapters = filteredChapters;
 
   if (filteredChapters.length === 0) {
     return <p>No chapters available.</p>;

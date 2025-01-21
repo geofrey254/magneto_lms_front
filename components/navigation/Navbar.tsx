@@ -189,7 +189,10 @@ function Navbar() {
             {status == "authenticated" ? (
               <>
                 <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
+                  <DropdownMenuTrigger
+                    asChild
+                    className="focus:outline-none focus:ring-transparent"
+                  >
                     {session?.user.image ? (
                       <button>
                         <Image

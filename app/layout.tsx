@@ -9,7 +9,6 @@ import Footer from "@/components/navigation/Footer";
 import { AppWrapper } from "@/components/providers/Providers";
 import { Providers } from "@/components/providers/SessionProvider";
 // types
-import { Subject, Chapter, Subscription } from "@/types/types";
 
 export const metadata: Metadata = {
   title: "Magneto - Unlock Learning, One Day at a Time",
@@ -29,32 +28,51 @@ async function fetchSubjects() {
       throw new Error("Failed to fetch subjects");
     }
 
-    const subjects: Subject[] = await res.json();
-    return subjects;
+    const data = await res.json();
+    const subjects = data.results; // Access the `results` key
+
+    if (!Array.isArray(subjects)) {
+      console.error("Chapters response is not an array:", subjects);
+      return [];
+    }
+
+    return subjects.reverse(); // Reverse the array if needed
   } catch (error) {
-    console.error("Error fetching subjects:", error);
+    console.error("Error fetching chapters:", error);
     return [];
   }
 }
 
 // fetch chapters
-async function fetchTopics() {
+async function fetchTopics(page: number, pageSize: number) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chapters/`, {
-      cache: "force-cache",
-      next: { revalidate: 1 },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/chapters/?page=${page}&page_size=${pageSize}`,
+      {
+        cache: "force-cache",
+        next: { revalidate: 1 },
+      }
+    );
 
     if (!res.ok) {
-      throw new Error("Failed to fetch subjects");
+      throw new Error("Failed to fetch chapters");
     }
 
-    const chapters: Chapter[] = await res.json();
+    const data = await res.json();
+    const chapters = data.results; // Access the `results` key
 
-    return chapters.reverse();
+    if (!Array.isArray(chapters)) {
+      console.error("Chapters response is not an array:", chapters);
+      return { chapters: [], totalPages: 1 };
+    }
+
+    // Calculate the total pages based on the count of chapters and pageSize
+    const totalPages = Math.ceil(data.count / pageSize);
+
+    return { chapters, totalPages }; // Return both the chapters and total pages
   } catch (error) {
     console.error("Error fetching chapters:", error);
-    return [];
+    return { chapters: [], totalPages: 1 };
   }
 }
 
@@ -72,7 +90,8 @@ async function fetchSubscriptions() {
       throw new Error("Failed to fetch subscriptions");
     }
 
-    const subscriptions: Subscription[] = await res.json();
+    const data = await res.json();
+    const subscriptions = data.results;
     return subscriptions;
   } catch (error) {
     console.error("Error fetching subscriptions:", error);
@@ -85,8 +104,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const page = 1; // Default to the first page (You can dynamically adjust this in a more complex setup)
+  const pageSize = 6; // Default to 6 chapters per page (You can dynamically adjust this in a more complex setup)
+
   const subjects = await fetchSubjects();
-  const chapters = await fetchTopics();
+  const { chapters, totalPages } = await fetchTopics(page, pageSize);
   const subscriptions = await fetchSubscriptions();
   return (
     <html lang="en">
@@ -97,6 +119,7 @@ export default async function RootLayout({
             subjects={subjects}
             chapters={chapters}
             subscriptions={subscriptions}
+            totalPages={totalPages}
           >
             {children}
           </AppWrapper>

@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaCertificate } from "react-icons/fa6";
 import Search from "@/components/custom/Search";
-import { ViewMoreWrapper } from "@/components/providers/ViewMore";
 
 function page() {
   return (
@@ -50,9 +49,7 @@ function page() {
           <Search />
         </div>
         <div className="py-2 px-4 md:py-8">
-          <ViewMoreWrapper limits={9}>
-            <Chapters />
-          </ViewMoreWrapper>
+          <Chapters />
         </div>
       </div>
     </section>

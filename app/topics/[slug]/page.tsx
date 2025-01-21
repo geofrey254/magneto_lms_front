@@ -2,9 +2,8 @@
 
 import React, { use } from "react";
 import Link from "next/link";
-import { Subscription, Lesson } from "@/types/types";
+import { Lesson } from "@/types/types";
 import { FaCertificate } from "react-icons/fa6";
-import { useSession } from "next-auth/react";
 import Latest from "../sidebar/latest";
 import Share from "../sidebar/share";
 import AIAgentSidebar from "../sidebar/AIAgentSidebar";
@@ -12,6 +11,9 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import useSWR from "swr";
+
+import SubscriptionPrompt from "@/components/custom/SubscriptionPrompt";
+import { useSubscription } from "@/hooks/useSubscription";
 
 interface TopicPageProps {
   params: Promise<{ slug: string }>;
@@ -25,54 +27,10 @@ const fetcher = async (url: string) => {
 };
 
 const TopicPage: React.FC<TopicPageProps> = ({ params }) => {
-  const { data: session } = useSession(); // Session state
   const { slug } = use(params); // Unwrap `params` Promise
 
   // Fetch subscription details (Optional: Refactor this into SWR as well)
-  const [isSubscribed, setSubscribed] = React.useState<Subscription | null>(
-    null
-  );
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    const fetchSubscription = async () => {
-      const csrfTokenResponse = await fetch("/api/check", { method: "GET" });
-      const tokenData = await csrfTokenResponse.json();
-      const csrfToken = tokenData.csrfToken;
-
-      if (session?.user) {
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/subscription/`,
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${session.accessToken}`,
-                "X-CSRFToken": csrfToken || "",
-                "X-User-Email": session.user.email,
-              },
-              credentials: "include",
-            }
-          );
-
-          const data = await res.json();
-          if (res.ok) {
-            setSubscribed(data.subscriptions[0]);
-          } else {
-            setSubscribed(null);
-          }
-        } catch (error) {
-          console.error("Error fetching subscription:", error);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
-      }
-    };
-
-    fetchSubscription();
-  }, [session]);
+  const { isSubscribed, loading } = useSubscription();
 
   // SWR to fetch lesson data
   const {
@@ -88,12 +46,22 @@ const TopicPage: React.FC<TopicPageProps> = ({ params }) => {
 
   // Loading state
   if (loading || isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-full bg-[#350203] h-screen flex justify-center items-center">
+        <h4 className="font-bold text-7xl text-white flex">
+          <FaCertificate className="text-white cert" size={100} />
+        </h4>
+      </div>
+    );
   }
 
   // Subscription validation
   if (!isSubscribed?.verified) {
-    return <p>Please subscribe to access this content.</p>;
+    return (
+      <div className="w-full bg-[#f8d6b6] h-screen flex justify-center items-center">
+        <SubscriptionPrompt />
+      </div>
+    );
   }
 
   // Lesson not found
