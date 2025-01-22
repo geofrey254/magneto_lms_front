@@ -59,6 +59,7 @@ const TutorInterface: FC = () => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleSend();
+      setInput("");
     }
   };
 
@@ -98,8 +99,9 @@ const TutorInterface: FC = () => {
           <header className="flex h-12 shrink-0 items-center gap-2 px-4">
             {/* <SidebarTrigger className="-ml-1 text-white hover:text-white/65" /> */}
             <div>
-              <h2 className="text-lg font-light text-white">
-                Magneto Learning Assistant
+              <h2 className="text-lg font-light text-white flex justify-center items-center gap-4">
+                <FaCertificate className="text-[#ffffff]" size={20} /> Magneto
+                Learning Assistant
               </h2>
             </div>
           </header>
@@ -117,7 +119,9 @@ const TutorInterface: FC = () => {
                   >
                     {/* Magneto Icon for Assistant */}
                     {msg.sender === "magneto" && (
-                      <FaCertificate size={40} className="text-white" />
+                      <div className=" bg-[#eee9e554] rounded-full border border-white p-1">
+                        <FaCertificate size={20} className="text-white" />
+                      </div>
                     )}
                     {/* Message Bubble */}
                     <div

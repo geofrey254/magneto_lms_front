@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { FaCertificate, FaCircle } from "react-icons/fa6";
 import Link from "next/link";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useHistory } from "@/hooks/useHistory";
 import DashboardLoading from "@/components/custom/DashboardLoad";
 
 // providers
@@ -14,6 +15,17 @@ import { IoIosArrowForward } from "react-icons/io";
 import { MdOutlineWavingHand } from "react-icons/md";
 import NoSubscriptionData from "@/components/custom/NoData";
 
+// shadcn
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 function Billing() {
   const context = useAppContext();
   const { subjects } = context;
@@ -21,12 +33,25 @@ function Billing() {
   const { data: session } = useSession();
 
   const { isSubscribed, loading } = useSubscription();
+  const { payment } = useHistory();
 
   const formatDate = (date: string) => {
     const options: Intl.DateTimeFormatOptions = {
       weekday: "long",
       year: "numeric",
       month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: false,
+    };
+    return new Date(date).toLocaleDateString("en-US", options);
+  };
+
+  const formatPayDate = (date: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "2-digit",
+      month: "numeric",
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
@@ -46,6 +71,10 @@ function Billing() {
         <NoSubscriptionData />
       </div>
     );
+  }
+
+  if (!payment || !Array.isArray(payment)) {
+    return <div>No payment history found.</div>;
   }
 
   const formattedStartDate = formatDate(isSubscribed.start_date);
@@ -104,6 +133,7 @@ function Billing() {
           </Link>
         </div>
         {/* row 3 */}
+        {/* row 4 */}
         <div className="bg-white border border-[#350203] rounded-2xl p-2">
           <div className="px-4 py-3 flex justify-between">
             <h3 className="text-base0 font-bold text-[#350203]">Subjects</h3>
@@ -226,6 +256,45 @@ function Billing() {
               </span>
             </div>
           </div>
+        </div>
+
+        <div className="mt-12 mb-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Payment History</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Reference Code</TableHead>
+                    <TableHead className="text-right">Amount Paid</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {payment.map((payment) => (
+                    <TableRow key={payment.id}>
+                      <TableCell>
+                        {formatPayDate(payment.payment_date)}
+                      </TableCell>
+                      <TableCell>{payment.reference_code}</TableCell>
+                      <TableCell>{payment.description}</TableCell>
+                      <TableCell
+                        className={`text-right ${
+                          payment.amount_paid < 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                        }`}
+                      >
+                        Ksh.{Math.abs(payment.amount_paid).toFixed(2)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

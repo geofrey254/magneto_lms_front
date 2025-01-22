@@ -168,6 +168,3 @@ const authHandler = NextAuth({
 });
 
 export { authHandler as GET, authHandler as POST };
-function signOut() {
-  throw new Error("Function not implemented.");
-}

@@ -48,3 +48,11 @@ export interface Lesson {
   description: string;
   lesson_content: string;
 }
+
+export interface PaymentHistory {
+  id: number;
+  user: string;
+  amount_paid: number;
+  reference_code: string;
+  payment_date: string;
+}
