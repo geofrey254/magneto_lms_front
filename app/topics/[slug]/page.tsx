@@ -21,7 +21,8 @@ interface TopicPageProps {
 
 const fetcher = async (url: string) => {
   const res = await fetch(url, { method: "GET", credentials: "include" });
-  const data = await res.json();
+  const content = await res.json();
+  const data = content.results;
   console.log("Fetched data:", data); // Log the fetched data
   return data[0];
 };

@@ -44,22 +44,27 @@ async function fetchSubjects() {
 }
 
 // fetch chapters
-async function fetchTopics(page: number, pageSize: number) {
+async function fetchTopics(
+  page: number,
+  pageSize: number,
+  all: boolean = false
+) {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/chapters/?page=${page}&page_size=${pageSize}`,
-      {
-        cache: "force-cache",
-        next: { revalidate: 1 },
-      }
-    );
+    const url = all
+      ? `${process.env.NEXT_PUBLIC_API_URL}/chapters/`
+      : `${process.env.NEXT_PUBLIC_API_URL}/chapters/?page=${page}`;
+
+    const res = await fetch(url, {
+      cache: "force-cache",
+      next: { revalidate: 1 },
+    });
 
     if (!res.ok) {
       throw new Error("Failed to fetch chapters");
     }
 
     const data = await res.json();
-    const chapters = data.results; // Access the `results` key
+    const chapters = data.results;
 
     if (!Array.isArray(chapters)) {
       console.error("Chapters response is not an array:", chapters);
@@ -67,9 +72,9 @@ async function fetchTopics(page: number, pageSize: number) {
     }
 
     // Calculate the total pages based on the count of chapters and pageSize
-    const totalPages = Math.ceil(data.count / pageSize);
+    const totalPages = all ? 1 : Math.ceil(data.count / 3);
 
-    return { chapters, totalPages }; // Return both the chapters and total pages
+    return { chapters, totalPages };
   } catch (error) {
     console.error("Error fetching chapters:", error);
     return { chapters: [], totalPages: 1 };

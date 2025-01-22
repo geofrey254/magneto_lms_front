@@ -10,16 +10,21 @@ interface AppContextProps {
   latestChapters: Chapter[];
   searchTerm: string;
   totalPages: number;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
   setSearchTerm: (term: string) => void;
+  setTotalPages: (pages: number) => void;
+  setChapters: (chapters: Chapter[]) => void;
 }
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 export function AppWrapper({
   subjects,
-  chapters,
+  chapters: initialChapters,
   subscriptions,
   children,
+  totalPages: initialTotalPages,
 }: Readonly<{
   subjects: Subject[] | null;
   chapters: Chapter[] | null;
@@ -28,16 +33,20 @@ export function AppWrapper({
   totalPages: number;
 }>) {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const totalPages = 0; // Initialize totalPages with a default value
-  const filteredChapters: Chapter[] = (chapters ?? []).filter((chap) => {
-    const term = searchTerm.toLowerCase();
-    return (
-      chap.title.toLowerCase().includes(term) ||
-      (chap.description?.toLowerCase().includes(term) ?? false) ||
-      (chap.subject?.name?.toLowerCase().includes(term) ?? false) ||
-      (chap.form?.name?.toLowerCase().includes(term) ?? false)
-    );
-  });
+  const [totalPages, setTotalPages] = useState(initialTotalPages);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [chapters, setChapters] = useState<Chapter[] | null>(initialChapters);
+  const filteredChapters: Chapter[] = (chapters ?? [])
+    .filter((chap) => {
+      const term = searchTerm.toLowerCase();
+      return (
+        chap.title.toLowerCase().includes(term) ||
+        (chap.description?.toLowerCase().includes(term) ?? false) ||
+        (chap.subject?.name?.toLowerCase().includes(term) ?? false) ||
+        (chap.form?.name?.toLowerCase().includes(term) ?? false)
+      );
+    })
+    .reverse();
 
   const latestChapters: Chapter[] = (chapters ?? []).slice(0, 9).reverse();
 
@@ -50,8 +59,12 @@ export function AppWrapper({
         filteredChapters,
         latestChapters,
         searchTerm,
+        currentPage,
+        setCurrentPage,
         totalPages,
         setSearchTerm,
+        setTotalPages,
+        setChapters,
       }}
     >
       {children}
