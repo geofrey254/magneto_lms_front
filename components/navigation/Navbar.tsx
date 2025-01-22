@@ -28,6 +28,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { signOut } from "next-auth/react";
 
 function Navbar() {
   const router = useRouter();
@@ -40,10 +41,11 @@ function Navbar() {
   };
 
   useEffect(() => {
-    if (!session) {
-      SignOut();
+    if (session?.error === "RefreshAccessTokenError") {
+      console.log("Token refresh failed. Logging out...");
+      signOut({ callbackUrl: "/signin" });
     }
-  });
+  }, [session]);
 
   return (
     <nav className="fixed bg-[#fbf5f3] z-50 h-[4vh] w-full flex justify-center items-center py-8 px-4 md:px-12 border-b border-[#350203]">

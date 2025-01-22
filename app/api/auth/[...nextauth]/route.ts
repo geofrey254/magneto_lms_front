@@ -137,7 +137,7 @@ const authHandler = NextAuth({
             statusText: response.statusText,
             error: errorText,
           });
-          throw new Error("Failed to refresh token");
+          return { ...token, error: "RefreshAccessTokenError" };
         }
         const data = await response.json();
         console.log("Session DATA:==", data);
@@ -168,3 +168,6 @@ const authHandler = NextAuth({
 });
 
 export { authHandler as GET, authHandler as POST };
+function signOut() {
+  throw new Error("Function not implemented.");
+}

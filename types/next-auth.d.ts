@@ -8,6 +8,7 @@ declare module "next-auth" {
     idToken?: string;
     refreshToken?: string;
     error?: "RefreshAccessTokenError" | "InvalidTokenError" | string;
+    accessTokenExpires;
 
     // Extend session
     user: {
