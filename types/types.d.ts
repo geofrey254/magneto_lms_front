@@ -45,6 +45,7 @@ export interface Subscription {
 }
 
 export interface Lesson {
+  title: string;
   description: string;
   lesson_content: string;
 }
@@ -55,4 +56,11 @@ export interface PaymentHistory {
   amount_paid: number;
   reference_code: string;
   payment_date: string;
+}
+
+export interface Message {
+  id: string; // Add the missing id property
+  sender: "user" | "Magneto";
+  text: string;
+  timestamp?: Date; // Optional timestamp if needed
 }

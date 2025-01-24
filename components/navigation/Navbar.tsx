@@ -2,12 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { MdOutlineMenuBook, MdOutlineSupportAgent } from "react-icons/md";
 import { BiSolidFoodMenu } from "react-icons/bi";
-import { FaCertificate, FaMoneyCheck, FaSchool } from "react-icons/fa6";
-import { TbBooks, TbListTree } from "react-icons/tb";
+import { FaCertificate } from "react-icons/fa6";
 import Link from "next/link";
 import Image from "next/image";
-import { LiaSchoolSolid } from "react-icons/lia";
-import { GiTalk } from "react-icons/gi";
 import { useSession } from "next-auth/react";
 import SignOut from "../buttons/SignOut";
 import { useRouter } from "next/navigation";
@@ -83,106 +80,89 @@ function Navbar() {
           </ul>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Overlay */}
         <div
-          className={
-            menuOpen
-              ? "collapse fixed w-0 h-[100%] left-4 top-[2000px] transition-all duration-700 ease-in-out md:hidden"
-              : "fixed mobile_nav w-[90%] left-4 top-16 h-[100%] z-10 transition-all duration-700 ease-linear rounded-3xl shadow-xl shadow-[#8a6445] md:hidden"
-          }
+          className={`fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-[#fbf5f3] transition-transform duration-300 ${
+            menuOpen ? "translate-x-full" : "translate-x-0"
+          }`}
         >
-          <div className="flex flex-col gap-6 text-[#f8d6b6]">
-            {status == "authenticated" ? (
-              <ul className="flex mt-6 px-4 justify-between">
-                <li>
-                  <Link
-                    href="/dashboard"
-                    onClick={handleNav}
-                    className="text-[#f8d6b6] border-2 border-[#f8d6b6] px-8 py-2 rounded-2xl"
-                  >
-                    Dashboard
-                  </Link>
-                </li>
-                <li>
-                  <SignOut />
-                </li>
-              </ul>
-            ) : (
-              <ul className="flex mt-6 px-4 justify-between">
-                <li>
-                  <Link
-                    href="/signin"
-                    onClick={handleNav}
-                    className="text-[#f8d6b6] border-2 border-[#f8d6b6] px-8 py-2 rounded-2xl"
-                  >
-                    Log In
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/signup"
-                    onClick={handleNav}
-                    className="bg-[#f8d6b6] hover:bg-[#facba0] rounded-2xl px-4 py-2 text-[#350203]"
-                  >
-                    Join Now
-                  </Link>
-                </li>
-              </ul>
+          <div className="p-4 flex flex-col gap-8">
+            {status === "authenticated" && (
+              <div className="flex flex-col gap-4">
+                <div className="text-lg font-bold">{session.user?.name}</div>
+                <hr className="border-[#350203]" />
+                <Link
+                  href="/magneto/tutor"
+                  onClick={handleNav}
+                  className="text-sm"
+                >
+                  Magneto AI
+                </Link>
+                <Link href="/billing" onClick={handleNav} className="text-sm">
+                  Subscription
+                </Link>
+                <Link href="/support" onClick={handleNav} className="text-sm">
+                  Support
+                </Link>
+              </div>
             )}
-            <hr />
-          </div>
+            <ul className="flex flex-col gap-6 text-[#350203] font-bold">
+              <li>
+                <Link href="/" onClick={handleNav}>
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/subjects" onClick={handleNav}>
+                  Subjects
+                </Link>
+              </li>
+              <li>
+                <Link href="/topics" onClick={handleNav}>
+                  Topics
+                </Link>
+              </li>
+              <li>
+                <Link href="/subscription" onClick={handleNav}>
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link href="/about_us" onClick={handleNav}>
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact_us" onClick={handleNav}>
+                  Contact Us
+                </Link>
+              </li>
+            </ul>
 
-          {/* Mobile Navigation Links */}
-          <ul className="flex flex-col text-lg gap-y-14 mt-8 p-4 text-[#f8d6b6] font-semibold">
-            <li className="flex gap-4 justify-start items-center">
-              <div className="bg-[#f8d6b6] rounded-full p-2">
-                <FaSchool size={15} className="text-[#350203]" />
+            {status === "authenticated" ? (
+              <div className="flex flex-col gap-4">
+                <hr className="border-[#350203]" />
+                <SignOut />
               </div>
-              <Link href="/" onClick={handleNav}>
-                Home
-              </Link>
-            </li>
-            <li className="flex gap-4 items-center">
-              <div className="bg-[#f8d6b6] rounded-full p-2">
-                <TbBooks size={15} className="text-[#350203]" />
+            ) : (
+              <div className="flex gap-4">
+                <Link
+                  href="/signup"
+                  onClick={handleNav}
+                  className="bg-[#f8d6b6] hover:bg-[#facba0] text-center py-2 rounded-2xl text-[#350203]"
+                >
+                  Join Now
+                </Link>
+                <Link
+                  href="/signin"
+                  onClick={handleNav}
+                  className="text-center text-[#350203] font-semibold"
+                >
+                  Log In
+                </Link>
               </div>
-              <Link href="/subjects" onClick={handleNav}>
-                Subjects
-              </Link>
-            </li>
-            <li className="flex gap-4 justify-start items-center">
-              <div className="bg-[#f8d6b6] rounded-full p-2">
-                <TbListTree size={15} className="text-[#350203]" />
-              </div>
-              <Link href="/topics" onClick={handleNav}>
-                Topics
-              </Link>
-            </li>
-            <li className="flex gap-4 items-center">
-              <div className="bg-[#f8d6b6] rounded-full p-2">
-                <FaMoneyCheck size={15} className="text-[#350203]" />
-              </div>
-              <Link href="/subscription" onClick={handleNav}>
-                Pricing
-              </Link>
-            </li>
-            <li className="flex gap-4 justify-start items-center">
-              <div className="bg-[#f8d6b6] rounded-full p-2">
-                <LiaSchoolSolid size={15} className="text-[#350203]" />
-              </div>
-              <Link href="/about_us" onClick={handleNav}>
-                About Us
-              </Link>
-            </li>
-            <li className="flex gap-4 items-center">
-              <div className="bg-[#f8d6b6] rounded-full p-2">
-                <GiTalk size={15} className="text-[#350203]" />
-              </div>
-              <Link href="/contact_us" onClick={handleNav}>
-                Contact Us
-              </Link>
-            </li>
-          </ul>
+            )}
+          </div>
         </div>
 
         {/* Right side of the Navbar */}

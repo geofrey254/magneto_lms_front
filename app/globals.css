@@ -228,3 +228,26 @@ body {
   font-family: system-ui, -apple-system, "Segoe UI", "Open Sans",
     "Helvetica Neue", sans-serif;
 }
+
+/* hide scrollbar */
+.scrollbar-hover::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+
+.scrollbar-hover:hover::-webkit-scrollbar-thumb {
+  background: #35020330;
+  border-radius: 3px;
+}
+
+.scrollbar-hover {
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: transparent transparent;
+  /* Firefox */
+}
+
+.scrollbar-hover:hover {
+  scrollbar-color: #35020330 transparent;
+  /* Firefox */
+}
