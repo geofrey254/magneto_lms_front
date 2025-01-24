@@ -82,81 +82,103 @@ function Navbar() {
 
         {/* Mobile Menu Overlay */}
         <div
-          className={`fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-[#fbf5f3] transition-transform duration-300 ${
+          className={`fixed top-16 left-0 w-full h-[calc(100vh-4rem)] bg-[#fbf5f3] transition-transform duration-300 ease-in-out shadow-2xl ${
             menuOpen ? "translate-x-full" : "translate-x-0"
           }`}
         >
-          <div className="p-4 flex flex-col gap-8">
+          <div className="p-6 flex flex-col gap-6 overflow-y-auto">
             {status === "authenticated" && (
               <div className="flex flex-col gap-4">
-                <div className="text-lg font-bold">{session.user?.name}</div>
+                <div className="flex items-center gap-3">
+                  {session?.user?.image ? (
+                    <Image
+                      src={session.user.image}
+                      alt="Profile"
+                      width={48}
+                      height={48}
+                      className="rounded-full border-2 border-[#350203]"
+                    />
+                  ) : (
+                    <div className="p-2 border-2 border-[#350203] rounded-full">
+                      <PiStudentFill size={32} className="text-[#350203]" />
+                    </div>
+                  )}
+                  <div className="text-lg font-bold truncate">
+                    {session.user?.name}
+                  </div>
+                </div>
                 <hr className="border-[#350203]" />
-                <Link
-                  href="/magneto/tutor"
-                  onClick={handleNav}
-                  className="text-sm"
-                >
-                  Magneto AI
-                </Link>
-                <Link href="/billing" onClick={handleNav} className="text-sm">
-                  Subscription
-                </Link>
-                <Link href="/support" onClick={handleNav} className="text-sm">
-                  Support
-                </Link>
+                <div className="flex flex-col gap-3">
+                  <Link
+                    href="/magneto/tutor"
+                    onClick={handleNav}
+                    className="flex items-center gap-2 p-3 rounded-lg hover:bg-[#f8d6b6] transition-colors"
+                  >
+                    <FaCertificate className="text-[#350203]" size={18} />
+                    Magneto AI
+                  </Link>
+                  <Link
+                    href="/billing"
+                    onClick={handleNav}
+                    className="flex items-center gap-2 p-3 rounded-lg hover:bg-[#f8d6b6] transition-colors"
+                  >
+                    <MdPayment className="text-[#350203]" size={18} />
+                    Subscription
+                  </Link>
+                  <Link
+                    href="/support"
+                    onClick={handleNav}
+                    className="flex items-center gap-2 p-3 rounded-lg hover:bg-[#f8d6b6] transition-colors"
+                  >
+                    <MdOutlineSupportAgent
+                      className="text-[#350203]"
+                      size={18}
+                    />
+                    Support
+                  </Link>
+                </div>
               </div>
             )}
-            <ul className="flex flex-col gap-6 text-[#350203] font-bold">
-              <li>
-                <Link href="/" onClick={handleNav}>
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/subjects" onClick={handleNav}>
-                  Subjects
-                </Link>
-              </li>
-              <li>
-                <Link href="/topics" onClick={handleNav}>
-                  Topics
-                </Link>
-              </li>
-              <li>
-                <Link href="/subscription" onClick={handleNav}>
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link href="/about_us" onClick={handleNav}>
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact_us" onClick={handleNav}>
-                  Contact Us
-                </Link>
-              </li>
+
+            <ul className="flex flex-col gap-2 text-[#350203] font-semibold">
+              {[
+                { href: "/", label: "Home" },
+                { href: "/subjects", label: "Subjects" },
+                { href: "/topics", label: "Topics" },
+                { href: "/subscription", label: "Pricing" },
+                { href: "/about_us", label: "About Us" },
+                { href: "/contact_us", label: "Contact Us" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={handleNav}
+                    className="block p-3 rounded-lg hover:bg-[#f8d6b6] transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
 
             {status === "authenticated" ? (
-              <div className="flex flex-col gap-4">
-                <hr className="border-[#350203]" />
+              <div className="mt-4">
+                <hr className="border-[#350203] mb-4" />
                 <SignOut />
               </div>
             ) : (
-              <div className="flex gap-4">
+              <div className="flex flex-col gap-3 mt-4">
                 <Link
                   href="/signup"
                   onClick={handleNav}
-                  className="bg-[#f8d6b6] hover:bg-[#facba0] text-center py-2 rounded-2xl text-[#350203]"
+                  className="bg-[#f8d6b6] hover:bg-[#facba0] text-center py-3 rounded-lg text-[#350203] font-semibold"
                 >
                   Join Now
                 </Link>
                 <Link
                   href="/signin"
                   onClick={handleNav}
-                  className="text-center text-[#350203] font-semibold"
+                  className="text-center py-3 rounded-lg text-[#350203] font-semibold border-2 border-[#350203] hover:bg-[#f8d6b6] transition-colors"
                 >
                   Log In
                 </Link>
