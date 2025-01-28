@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       "images.pexels.com",
       "storage.googleapis.com",
       "lh3.googleusercontent.com",
+      "magneto-django-s3.s3.amazonaws.com",
       process.env.NEXT_PUBLIC_DJANGO_HOSTNAME || "localhost:8000", // Add Django media host
     ],
   },

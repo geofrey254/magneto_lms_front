@@ -24,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { PiStudentFill } from "react-icons/pi";
 
 function Billing() {
   const context = useAppContext();
@@ -172,14 +173,19 @@ function Billing() {
       <div className="md:col-start-7 md:col-end-13 lg:col-start-5 lg:col-end-13">
         {/* User Info */}
         <div className="bg-white border border-[#350203] rounded-2xl p-4 flex flex-col md:flex-row gap-4 items-center">
-          <Image
-            src={session?.user.image || ""}
-            alt="user photo"
-            width={60}
-            height={60}
-            quality={100}
-            className="rounded-2xl"
-          />
+          {session?.user?.image ? (
+            <Image
+              src={session.user.image}
+              alt="Profile"
+              width={48}
+              height={48}
+              className="rounded-full border-2 border-[#350203]"
+            />
+          ) : (
+            <div className="p-2 border-2 border-[#350203] rounded-full">
+              <PiStudentFill size={32} className="text-[#350203]" />
+            </div>
+          )}
           <div className="tracking-wider flex flex-col gap-2">
             <h3 className="font-semibold text-sm">
               Name:{" "}

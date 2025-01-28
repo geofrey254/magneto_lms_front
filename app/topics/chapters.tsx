@@ -22,26 +22,29 @@ function Chapters() {
     setCurrentPage,
     totalPages,
     setChapters,
+    searchTerm,
   } = context;
 
   // Fetch chapters when the page changes
   useEffect(() => {
     async function fetchChapters() {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/chapters/?page=${currentPage}`
-        );
+        const url = searchTerm
+          ? `${process.env.NEXT_PUBLIC_API_URL}/chapters/?search=${searchTerm}`
+          : `${process.env.NEXT_PUBLIC_API_URL}/chapters/?page=${currentPage}`;
+
+        const res = await fetch(url);
         if (!res.ok) {
           throw new Error("Failed to fetch chapters");
         }
         const data = await res.json();
-        setChapters(data.results);
+        setChapters(data.results || data);
       } catch (error) {
         console.error("Error fetching chapters:", error);
       }
     }
     fetchChapters();
-  }, [currentPage, setChapters]);
+  }, [currentPage, setChapters, searchTerm]);
 
   if (!filteredChapters || filteredChapters.length === 0) {
     return <p>No chapters available.</p>;
@@ -84,24 +87,28 @@ function Chapters() {
         ))}
       </div>
 
-      {/* Pagination Controls */}
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              onClick={() => handlePageChange(currentPage - 1)}
-            />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">
-              {currentPage} <span className="mx-1">of</span> {totalPages}
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      {/* Pagination Controls (only show if not searching) */}
+      {!searchTerm && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => handlePageChange(currentPage - 1)}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">
+                {currentPage} <span className="mx-1">of</span> {totalPages}
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext
+                onClick={() => handlePageChange(currentPage + 1)}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </section>
   );
 }
